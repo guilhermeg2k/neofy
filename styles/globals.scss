@@ -33,14 +33,28 @@ a {
   text-decoration: none;
 }
 
-@media (max-width: 1080px) {
-  html {
-    font-size: 93.75%;
+@media (max-width: vars.$large) {
+  html,
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-size: 90%;
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: vars.$medium) {
+  html,
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-size: 87%;
+  }
+}
+
+@media (max-width: vars.$small) {
   html {
-    font-size: 87.5%;
+    font-size: 85%;
   }
 }

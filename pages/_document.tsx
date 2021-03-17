@@ -1,5 +1,4 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-
 export default class MyDocument extends Document {
   render() {
     return (
@@ -12,6 +11,7 @@ export default class MyDocument extends Document {
           />
         </Head>
         <body>
+          <script src="https://sdk.scdn.co/spotify-player.js"></script>
           <Main />
           <NextScript />
         </body>
