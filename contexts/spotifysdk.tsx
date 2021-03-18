@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 
-interface ChallengesProviderProps {
+interface SpotifySDKProviderProps {
   children: ReactNode;
 }
 
@@ -19,7 +19,7 @@ interface SpotifySDKContextData {
 
 export const SpotifySDKContext = createContext({} as SpotifySDKContextData);
 
-export function SpotifySDKProvider({ children }: ChallengesProviderProps) {
+export function SpotifySDKProvider({ children }: SpotifySDKProviderProps) {
   const [currentSong, setCurrentSong] = useState("");
   const [currentArtist, setCurrentArtist] = useState("");
   const [albumImgURL, setAlbumImgUrl] = useState("");
@@ -27,7 +27,8 @@ export function SpotifySDKProvider({ children }: ChallengesProviderProps) {
   const [paused, setPaused] = useState(true);
   const [repeatMode, setRepeatMode] = useState(0);
   const [player, setPlayer] = useState({});
-  const token = "";
+  const token =
+    "BQDpMgb_2DTRkIyAYoBiWnci9eDXth8FjzkknpRtGOi2z_R7qfvD711rKh02WSE1N7SPFlWC7_kJKVZKsey2HnHpakDABySgVAwvmzW5PwphnHeTJ7ltEW95pJlZY3d3QAj3udnZN5jVKEZ8GF74-QrVjaP0fQXxVhP-Lfz7IGQ8mivLKrz0kNk";
 
   function changeVolume(newVolume: number) {
     player.setVolume(newVolume).then(() => {

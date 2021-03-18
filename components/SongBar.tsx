@@ -76,7 +76,7 @@ export default function SongBar() {
             </div>
             <div
               className={`${styles.iconButton} ${
-                repeatMode !== 0 ? styles.active : ""
+                repeatMode != 0 ? styles.active : ""
               }`}
             >
               <Replay />
