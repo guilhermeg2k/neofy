@@ -11,7 +11,7 @@ interface SpotifySDKContextData {
   shuffle: boolean;
   paused: boolean;
   repeatMode: number;
-  changeVolume: (number) => void;
+  changeVolume: (value: number) => void;
   togglePlay: () => void;
   nextSong: () => void;
   previousSong: () => void;

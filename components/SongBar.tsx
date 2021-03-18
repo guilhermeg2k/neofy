@@ -45,58 +45,63 @@ export default function SongBar() {
   }
 
   return (
-    <div className={styles.songBarContainer}>
-      <main>
-        <div className={styles.songInfo}>
-          <img src={albumImgURL} alt="album-cover" />
-          <div>
-            <h3>{currentSong}</h3>
-            <h4>{currentArtist}</h4>
-          </div>
-        </div>
-        <div className={styles.songProgress}>
-          <div>
-            <input type="range" min="1" max="100" className={styles.slider} />
-            <span>1:33~3:23</span>
-          </div>
-          <div>
-            <div
-              className={`${styles.iconButton} ${shuffle ? styles.active : ""}`}
-            >
-              <Shuffle />
-            </div>
-            <div className={styles.iconButton} onClick={handlePreviousSong}>
-              <SkipPrevious />
-            </div>
-            <div className={styles.iconButton} onClick={handleTogglePlay}>
-              {paused ? <PlayCircleOutline /> : <PauseCircleOutline />}
-            </div>
-            <div className={styles.iconButton} onClick={handleNextSong}>
-              <SkipNext />
-            </div>
-            <div
-              className={`${styles.iconButton} ${
-                repeatMode != 0 ? styles.active : ""
-              }`}
-            >
-              <Replay />
+    <>
+      <script src="https://sdk.scdn.co/spotify-player.js"></script>
+      <div className={styles.songBarContainer}>
+        <main>
+          <div className={styles.songInfo}>
+            <img src={albumImgURL} alt="album-cover" />
+            <div>
+              <h3>{currentSong}</h3>
+              <h4>{currentArtist}</h4>
             </div>
           </div>
-        </div>
-        <div className={styles.rightControlls}>
-          <VolumeUp />
-          <input
-            type="range"
-            min="1"
-            max="100"
-            className={styles.slider}
-            onChange={handleChangeVolume}
-          />
-          <div className={styles.iconButton}>
-            <Fullscreen />
+          <div className={styles.songProgress}>
+            <div>
+              <input type="range" min="1" max="100" className={styles.slider} />
+              <span>1:33~3:23</span>
+            </div>
+            <div>
+              <div
+                className={`${styles.iconButton} ${
+                  shuffle ? styles.active : ""
+                }`}
+              >
+                <Shuffle />
+              </div>
+              <div className={styles.iconButton} onClick={handlePreviousSong}>
+                <SkipPrevious />
+              </div>
+              <div className={styles.iconButton} onClick={handleTogglePlay}>
+                {paused ? <PlayCircleOutline /> : <PauseCircleOutline />}
+              </div>
+              <div className={styles.iconButton} onClick={handleNextSong}>
+                <SkipNext />
+              </div>
+              <div
+                className={`${styles.iconButton} ${
+                  repeatMode != 0 ? styles.active : ""
+                }`}
+              >
+                <Replay />
+              </div>
+            </div>
           </div>
-        </div>
-      </main>
-    </div>
+          <div className={styles.rightControlls}>
+            <VolumeUp />
+            <input
+              type="range"
+              min="1"
+              max="100"
+              className={styles.slider}
+              onChange={handleChangeVolume}
+            />
+            <div className={styles.iconButton}>
+              <Fullscreen />
+            </div>
+          </div>
+        </main>
+      </div>
+    </>
   );
 }
