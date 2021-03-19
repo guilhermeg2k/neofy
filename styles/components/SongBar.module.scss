@@ -74,36 +74,56 @@
   border-radius: 10px;
 
   &::-webkit-slider-thumb {
-    height: 15px;
-    cursor: pointer;
-  }
-
-  &::-moz-range-thumb {
+    appearance: none;
     visibility: hidden;
     height: 18px;
     width: 18px;
     border-radius: 50%;
     border-color: vars.$white;
     cursor: pointer;
-  }
-
-  &::-moz-range-thumb {
-    visibility: hidden;
     opacity: 0;
     transition: visibility 0.3s linear, opacity 0.1s linear;
   }
+
+  &::-moz-range-thumb {
+    appearance: none;
+    visibility: hidden;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    border-color: vars.$white;
+    cursor: pointer;
+    opacity: 0;
+    transition: visibility 0.3s linear, opacity 0.1s linear;
+  }
+
+  &::-webkit-slider-runnable-track {
+    background-color: vars.$primary;
+    border-radius: 10px;
+    height: 11px;
+  }
+
   &::-moz-range-progress {
     background-color: vars.$primary;
     border-radius: 10px;
     height: 11px;
   }
   &:hover {
-    cursor: pointer;
     &::-moz-range-thumb {
       visibility: visible;
       opacity: 1;
       height: 18px;
       width: 18px;
+      border-radius: 50%;
+      border-color: vars.$white;
+      cursor: pointer;
+    }
+    &::-webkit-slider-thumb {
+      visibility: visible;
+      position: relative;
+      top: -4px;
+      opacity: 1;
+      background-color: vars.$white;
       border-radius: 50%;
       border-color: vars.$white;
       cursor: pointer;

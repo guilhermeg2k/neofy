@@ -18,9 +18,11 @@ function MyApp({ Component, pageProps }) {
 
   if (authenticated) {
     return (
-      <SpotifySDKProvider>
-        <Component {...pageProps} />
-      </SpotifySDKProvider>
+      <>
+        <SpotifySDKProvider>
+          <Component {...pageProps} />
+        </SpotifySDKProvider>
+      </>
     );
   } else {
     return <p>Redirecting to spotify Login page...</p>;

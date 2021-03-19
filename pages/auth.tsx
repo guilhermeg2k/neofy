@@ -16,10 +16,13 @@ export default function Auth() {
   useEffect(() => {
     if (!router.isReady) return;
     if (!error) {
-      fetchUserCredencials(clientID, code as string, codeVerifier, redirectURL);
-      window.open("/", "_self");
+      fetchUserCredencials(
+        clientID,
+        code as string,
+        codeVerifier,
+        redirectURL
+      ).then(() => window.open("/", "_self"));
     } else {
-      console.log(error);
       Cookies.set("auth-status", "failed");
     }
   }, [router.isReady]);

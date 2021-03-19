@@ -10,15 +10,6 @@ export interface UserCredencials {
   refreshToken: string;
 }
 
-interface UserInfo {
-  displayName: string;
-  email: string;
-  id: string;
-  imageURL: string;
-  product: string;
-  type: string;
-}
-
 export const clientID = "eca09370790043d6a575e301b2da83ca";
 export const redirectURL = "http://localhost:3000/auth";
 export const scopes = [
@@ -26,6 +17,8 @@ export const scopes = [
   "user-read-email",
   "user-read-private",
   "user-follow-modify",
+  "user-read-playback-state",
+  "user-modify-playback-state",
 ];
 
 const spotifyAPI = axios.create({
@@ -34,10 +27,11 @@ const spotifyAPI = axios.create({
     Authorization: `${getUserCredencials().tokenType} ${
       getUserCredencials().acessToken
     }`,
+    "Content-Type": "application/json",
   },
 });
 
-function getUserCredencials(): UserCredencials {
+export function getUserCredencials(): UserCredencials {
   const credencials = Cookies.get("user-credencials");
   if (credencials) {
     return JSON.parse(credencials);
@@ -75,33 +69,50 @@ export function fetchUserCredencials(
   params.append("code", code);
   params.append("redirect_uri", redirectURL);
   params.append("code_verifier", codeVerifier);
-  axios
-    .post("https://accounts.spotify.com/api/token", params, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    })
-    .then((result) => {
-      const data = result.data;
-      const userCredencials: UserCredencials = {
-        acessToken: data.access_token,
-        expiresIn: data.expires_in,
-        refreshToken: data.refresh_token,
-        tokenType: data.token_type,
-        scope: data.scope,
-      };
-      Cookies.set("user-credencials", JSON.stringify(userCredencials));
-      Cookies.set("auth-status", "success");
-    })
-    .catch((err) => {
-      Cookies.set("auth-status", "failed");
-      console.log(err);
-    });
+  return new Promise((resolve, reject) => {
+    axios
+      .post("https://accounts.spotify.com/api/token", params, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      })
+      .then((result) => {
+        const data = result.data;
+        const userCredencials: UserCredencials = {
+          acessToken: data.access_token,
+          expiresIn: data.expires_in,
+          refreshToken: data.refresh_token,
+          tokenType: data.token_type,
+          scope: data.scope,
+        };
+        Cookies.set("user-credencials", JSON.stringify(userCredencials));
+        Cookies.set("auth-status", "success");
+        resolve("done");
+      })
+      .catch((err) => {
+        Cookies.set("auth-status", "failed");
+        reject();
+        console.log(err);
+      });
+  });
+}
+
+export async function playCurrentPlayBack() {
+  await spotifyAPI.put("me/player", {
+    device_ids: [Cookies.get("device-id")],
+    play: true,
+  });
 }
 
 export function getUserInfo() {
   spotifyAPI.get("me").then((response) => {
     console.log(response.data);
+  });
+}
+
+export function playURI(spotifyURI: string) {
+  spotifyAPI.put(`me/player/play?device_id=${Cookies.get("device-id")}`, {
+    uris: [spotifyURI],
   });
 }
 

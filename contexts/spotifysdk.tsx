@@ -1,10 +1,18 @@
+// @ts-nocheck
 import { createContext, useState, useEffect, ReactNode } from "react";
+import {
+  getUserCredencials,
+  playURI,
+  playCurrentPlayBack,
+} from "../services/spotifyapi";
+import Cookies from "js-cookie";
 
 interface SpotifySDKProviderProps {
   children: ReactNode;
 }
 
 interface SpotifySDKContextData {
+  player: object;
   currentSong: string;
   currentArtist: string;
   albumImgURL: string;
@@ -27,9 +35,8 @@ export function SpotifySDKProvider({ children }: SpotifySDKProviderProps) {
   const [paused, setPaused] = useState(true);
   const [repeatMode, setRepeatMode] = useState(0);
   const [player, setPlayer] = useState({});
-  const token =
-    "BQDpMgb_2DTRkIyAYoBiWnci9eDXth8FjzkknpRtGOi2z_R7qfvD711rKh02WSE1N7SPFlWC7_kJKVZKsey2HnHpakDABySgVAwvmzW5PwphnHeTJ7ltEW95pJlZY3d3QAj3udnZN5jVKEZ8GF74-QrVjaP0fQXxVhP-Lfz7IGQ8mivLKrz0kNk";
 
+  const token = getUserCredencials().acessToken;
   function changeVolume(newVolume: number) {
     player.setVolume(newVolume).then(() => {
       console.log("Volume updated!");
@@ -54,60 +61,62 @@ export function SpotifySDKProvider({ children }: SpotifySDKProviderProps) {
     });
   }
 
-  useEffect(() => {
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const _player = new Spotify.Player({
-        name: "Web Playback SDK Quick Start Player",
-        getOAuthToken: (cb) => {
-          cb(token);
-        },
-      });
-      // Error handling
-      _player.addListener("initialization_error", ({ message }) => {
-        console.error(message);
-      });
-      _player.addListener("authentication_error", ({ message }) => {
-        console.error(message);
-      });
-      _player.addListener("account_error", ({ message }) => {
-        console.error(message);
-      });
-      _player.addListener("playback_error", ({ message }) => {
-        console.error(message);
-      });
+  window.onSpotifyWebPlaybackSDKReady = () => {
+    console.log("fala ZEZE");
+    const _player = new Spotify.Player({
+      name: "Neofy",
+      getOAuthToken: (cb) => {
+        cb(token);
+      },
+    });
 
-      // Playback status updates
-      _player.addListener("player_state_changed", (state) => {
-        let { current_track } = state.track_window;
-        setCurrentSong(current_track.name);
-        setCurrentArtist(current_track.artists[0].name);
-        setAlbumImgUrl(current_track.album.images[0].url);
-        setShuffle(state.shuffle);
-        setRepeatMode(state.repeatMode);
-        setPaused(state.paused);
-        console.log(state);
-      });
+    // Error handling
+    _player.addListener("initialization_error", ({ message }) => {
+      console.error(message);
+    });
+    _player.addListener("authentication_error", ({ message }) => {
+      console.error(message);
+    });
+    _player.addListener("account_error", ({ message }) => {
+      console.error(message);
+    });
+    _player.addListener("playback_error", ({ message }) => {
+      console.error(message);
+    });
 
-      // Ready
-      _player.addListener("ready", ({ device_id }) => {
-        console.log("Ready with Device ID", device_id);
-      });
+    // Playback status updates
+    _player.addListener("player_state_changed", (state) => {
+      let { current_track } = state.track_window;
+      setCurrentSong(current_track.name);
+      setCurrentArtist(current_track.artists[0].name);
+      setAlbumImgUrl(current_track.album.images[0].url);
+      setShuffle(state.shuffle);
+      setRepeatMode(state.repeatMode);
+      setPaused(state.paused);
+      console.log(state);
+    });
 
-      // Not Ready
-      _player.addListener("not_ready", ({ device_id }) => {
-        console.log("Device ID has gone offline", device_id);
-        _player.setName("Shak3nFy");
-      });
+    // Ready
+    _player.addListener("ready", ({ device_id }) => {
+      console.log("Ready with Device ID", device_id);
+      Cookies.set("device-id", device_id);
+      playCurrentPlayBack();
+    });
 
-      // Connect to the player!
-      _player.connect();
-      setPlayer(_player);
-    };
-  }, []);
+    // Not Ready
+    _player.addListener("not_ready", ({ device_id }) => {
+      console.log("Device ID has gone offline", device_id);
+    });
+
+    // Connect to the player!
+    _player.connect();
+    setPlayer(_player);
+  };
 
   return (
     <SpotifySDKContext.Provider
       value={{
+        player,
         currentSong,
         currentArtist,
         albumImgURL,

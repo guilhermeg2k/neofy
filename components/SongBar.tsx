@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import styles from "../styles/components/SongBar.module.scss";
 import {
   Shuffle,
@@ -14,6 +14,7 @@ import {
 import { SpotifySDKContext } from "../contexts/spotifysdk";
 
 export default function SongBar() {
+  useEffect(() => {}, []);
   const {
     currentSong,
     currentArtist,
@@ -46,11 +47,10 @@ export default function SongBar() {
 
   return (
     <>
-      <script src="https://sdk.scdn.co/spotify-player.js"></script>
       <div className={styles.songBarContainer}>
         <main>
           <div className={styles.songInfo}>
-            <img src={albumImgURL} alt="album-cover" />
+            {albumImgURL ? <img src={albumImgURL} alt="album-cover" /> : <></>}
             <div>
               <h3>{currentSong}</h3>
               <h4>{currentArtist}</h4>
