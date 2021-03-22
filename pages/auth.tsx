@@ -1,10 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import {
-  fetchUserCredencials,
-  clientID,
-  redirectURL,
-} from "../services/spotifyapi";
+import { SpotifyAPI, initSpotifyAPI } from "../services/spotifyapi";
 import Cookies from "js-cookie";
 
 export default function Auth() {
@@ -16,12 +12,18 @@ export default function Auth() {
   useEffect(() => {
     if (!router.isReady) return;
     if (!error) {
-      fetchUserCredencials(
-        clientID,
-        code as string,
-        codeVerifier,
-        redirectURL
-      ).then(() => window.open("/", "_self"));
+      async function fetchCredencials() {
+        const userCredencials = await SpotifyAPI.fetchUserCredencials(
+          SpotifyAPI.clientID,
+          code as string,
+          codeVerifier,
+          SpotifyAPI.redirectURL
+        );
+        Cookies.set("user-credencials", JSON.stringify(userCredencials));
+        Cookies.set("auth-status", "success");
+        window.open("/", "_self");
+      }
+      fetchCredencials();
     } else {
       Cookies.set("auth-status", "failed");
     }

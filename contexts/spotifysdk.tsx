@@ -1,18 +1,12 @@
-// @ts-nocheck
 import { createContext, useState, useEffect, ReactNode } from "react";
-import {
-  getUserCredencials,
-  playURI,
-  playCurrentPlayBack,
-} from "../services/spotifyapi";
-import Cookies from "js-cookie";
+import { spotifySDK } from "../services/spotifysdk";
+import { SpotifyAPI } from "../services/spotifyapi";
 
 interface SpotifySDKProviderProps {
   children: ReactNode;
 }
 
 interface SpotifySDKContextData {
-  player: object;
   currentSong: string;
   currentArtist: string;
   albumImgURL: string;
@@ -23,100 +17,69 @@ interface SpotifySDKContextData {
   togglePlay: () => void;
   nextSong: () => void;
   previousSong: () => void;
+  toggleShuffle: () => void;
+  changeRepeatMode: () => void;
 }
 
 export const SpotifySDKContext = createContext({} as SpotifySDKContextData);
 
 export function SpotifySDKProvider({ children }: SpotifySDKProviderProps) {
+  const spotifyAPI = new SpotifyAPI();
   const [currentSong, setCurrentSong] = useState("");
   const [currentArtist, setCurrentArtist] = useState("");
   const [albumImgURL, setAlbumImgUrl] = useState("");
   const [shuffle, setShuffle] = useState(false);
   const [paused, setPaused] = useState(true);
   const [repeatMode, setRepeatMode] = useState(0);
-  const [player, setPlayer] = useState({});
 
-  const token = getUserCredencials().acessToken;
   function changeVolume(newVolume: number) {
-    player.setVolume(newVolume).then(() => {
-      console.log("Volume updated!");
-    });
+    spotifySDK.changeVolume(newVolume);
   }
 
   function togglePlay() {
-    player.togglePlay().then(() => {
-      console.log("Toggled playback!");
-    });
+    spotifySDK.togglePlay();
   }
 
   function nextSong() {
-    player.nextTrack().then(() => {
-      console.log("Skipped to next track!");
-    });
+    spotifySDK.nextSong();
   }
 
   function previousSong() {
-    player.previousTrack().then(() => {
-      console.log("Set to previous track!");
-    });
+    spotifySDK.previousSong();
   }
 
-  window.onSpotifyWebPlaybackSDKReady = () => {
-    console.log("fala ZEZE");
-    const _player = new Spotify.Player({
-      name: "Neofy",
-      getOAuthToken: (cb) => {
-        cb(token);
-      },
-    });
+  function toggleShuffle() {
+    spotifyAPI.setShuffle(!shuffle);
+  }
 
-    // Error handling
-    _player.addListener("initialization_error", ({ message }) => {
-      console.error(message);
-    });
-    _player.addListener("authentication_error", ({ message }) => {
-      console.error(message);
-    });
-    _player.addListener("account_error", ({ message }) => {
-      console.error(message);
-    });
-    _player.addListener("playback_error", ({ message }) => {
-      console.error(message);
-    });
+  function changeRepeatMode() {
+    let newRepeatMode = 0;
+    if (repeatMode === 0) {
+      newRepeatMode = 1;
+    } else if (repeatMode === 1) {
+      newRepeatMode = 2;
+    } else {
+      newRepeatMode = 0;
+    }
 
-    // Playback status updates
-    _player.addListener("player_state_changed", (state) => {
+    spotifyAPI.setRepeatMode(newRepeatMode);
+  }
+  useEffect(() => {
+    spotifySDK.onStateChange((state) => {
       let { current_track } = state.track_window;
       setCurrentSong(current_track.name);
       setCurrentArtist(current_track.artists[0].name);
       setAlbumImgUrl(current_track.album.images[0].url);
       setShuffle(state.shuffle);
-      setRepeatMode(state.repeatMode);
+      setRepeatMode(state.repeat_mode);
       setPaused(state.paused);
       console.log(state);
     });
-
-    // Ready
-    _player.addListener("ready", ({ device_id }) => {
-      console.log("Ready with Device ID", device_id);
-      Cookies.set("device-id", device_id);
-      playCurrentPlayBack();
-    });
-
-    // Not Ready
-    _player.addListener("not_ready", ({ device_id }) => {
-      console.log("Device ID has gone offline", device_id);
-    });
-
-    // Connect to the player!
-    _player.connect();
-    setPlayer(_player);
-  };
+  }, []);
 
   return (
     <SpotifySDKContext.Provider
       value={{
-        player,
         currentSong,
         currentArtist,
         albumImgURL,
@@ -127,6 +90,8 @@ export function SpotifySDKProvider({ children }: SpotifySDKProviderProps) {
         paused,
         previousSong,
         nextSong,
+        toggleShuffle,
+        changeRepeatMode,
       }}
     >
       {children}

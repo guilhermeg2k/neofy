@@ -1,16 +1,19 @@
 import "../styles/globals.scss";
 import { useEffect, useState } from "react";
 import { SpotifySDKProvider } from "../contexts/spotifysdk";
-import { authenticate } from "../services/spotifyapi";
+import { SpotifyAPI } from "../services/spotifyapi";
+import { initSpotifySDK } from "../services/spotifysdk";
 import Cookies from "js-cookie";
 
 function MyApp({ Component, pageProps }) {
   const [authenticated, setAuthenticated] = useState(false);
 
+  initSpotifySDK();
+
   useEffect(() => {
     const authStatus = Cookies.get("auth-status");
     if (authStatus === "failed" || !authStatus) {
-      authenticate();
+      SpotifyAPI.authenticate();
     } else {
       setAuthenticated(true);
     }

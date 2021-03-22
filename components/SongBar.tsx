@@ -26,6 +26,8 @@ export default function SongBar() {
     togglePlay,
     nextSong,
     previousSong,
+    toggleShuffle,
+    changeRepeatMode,
   } = useContext(SpotifySDKContext);
 
   function handleChangeVolume(event: React.ChangeEvent<HTMLInputElement>) {
@@ -45,6 +47,13 @@ export default function SongBar() {
     previousSong();
   }
 
+  function handleToggleShuffle() {
+    toggleShuffle();
+  }
+
+  function handleChangeRepeatMode() {
+    changeRepeatMode();
+  }
   return (
     <>
       <div className={styles.songBarContainer}>
@@ -66,6 +75,7 @@ export default function SongBar() {
                 className={`${styles.iconButton} ${
                   shuffle ? styles.active : ""
                 }`}
+                onClick={handleToggleShuffle}
               >
                 <Shuffle />
               </div>
@@ -82,8 +92,11 @@ export default function SongBar() {
                 className={`${styles.iconButton} ${
                   repeatMode != 0 ? styles.active : ""
                 }`}
+                onClick={handleChangeRepeatMode}
               >
                 <Replay />
+                {repeatMode === 1 ? <span>¹</span> : <></>}
+                {repeatMode === 2 ? <span>²</span> : <></>}
               </div>
             </div>
           </div>

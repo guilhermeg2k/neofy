@@ -20,3 +20,9 @@ export function generateRandomString(): string {
     Math.random().toString(36).substring(2, 15)
   );
 }
+
+export async function generatecodeChallenge(codeVerifier: string) {
+  let hashed = await sha256(codeVerifier);
+  let base64encoded = base64urlencode(hashed);
+  return base64encoded;
+}

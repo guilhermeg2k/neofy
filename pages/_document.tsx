@@ -10,11 +10,11 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
           <title> Neofy </title>
-          <script src="https://sdk.scdn.co/spotify-player.js"></script>
         </Head>
         <body>
           <Main />
           <NextScript />
+          <script src="https://sdk.scdn.co/spotify-player.js"></script>
         </body>
       </Html>
     );
