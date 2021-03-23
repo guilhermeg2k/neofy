@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 
 import { SpotifyAPI } from "../services/spotifyapi";
 
-interface SpotifyPlayer {
+export interface SpotifyPlayer {
   connect: () => Promise<boolean>;
   disconnect: () => void;
   addListener: (
@@ -25,11 +25,11 @@ interface SpotifyPlayer {
   nextTrack: () => Promise<void>;
 }
 
-interface WebPlayblackPlayer {
+export interface WebPlayblackPlayer {
   device_id: string;
 }
 
-interface WebPlaybackState {
+export interface WebPlaybackState {
   context: {
     uri: string; // The URI of the context (can be void)
     metadata: {}; // Additional metadata for the context (can be void)
@@ -57,13 +57,14 @@ interface WebPlaybackState {
   };
 }
 
-interface WebPlaybackTrack {
+export interface WebPlaybackTrack {
   uri: string; // Spotify URI
   id: string; // Spotify ID from URI (can be void)
   type: string; // Content type: can be "track", "episode" or "ad"
   media_type: string; // Type of file: can be "audio" or "video"
   name: string; // Name of content
   is_playable: boolean; // Flag indicating whether it can be played
+  duration_ms: number;
   album: {
     uri: string; // Spotify Album URI
     name: string;
@@ -72,7 +73,7 @@ interface WebPlaybackTrack {
   artists: [{ uri: string; name: string }];
 }
 
-interface WebPlaybackError {
+export interface WebPlaybackError {
   message: string;
 }
 
@@ -124,13 +125,6 @@ class SpotifySDK {
         }
       );
 
-      this.player.addListener("ready", ({ device_id }: WebPlayblackPlayer) => {
-        console.log("Ready with Device ID", device_id);
-        Cookies.set("device-id", device_id);
-        let spotifyAPI = new SpotifyAPI();
-        spotifyAPI.playCurrentPlayBack();
-      });
-
       // Not Ready
       this.player.addListener(
         "not_ready",
@@ -151,6 +145,12 @@ class SpotifySDK {
         callback(state);
       }
     );
+  }
+
+  onReady(callback: (state: WebPlayblackPlayer) => void) {
+    this.player?.addListener("ready", (state: WebPlayblackPlayer) => {
+      callback(state);
+    });
   }
 
   changeVolume(newVolume: number) {

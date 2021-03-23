@@ -33,6 +33,14 @@ export class SpotifyAPI {
     });
   }
 
+  static get userCredencials(): UserCredencials {
+    const credencials = Cookies.get("user-credencials");
+    if (credencials) {
+      return JSON.parse(credencials);
+    }
+    return {} as UserCredencials;
+  }
+
   async playCurrentPlayBack() {
     await this.axios.put("me/player", {
       device_ids: [Cookies.get("device-id")],
@@ -80,13 +88,6 @@ export class SpotifyAPI {
     } catch (err) {
       console.log(err);
     }
-  }
-  static get userCredencials(): UserCredencials {
-    const credencials = Cookies.get("user-credencials");
-    if (credencials) {
-      return JSON.parse(credencials);
-    }
-    return {} as UserCredencials;
   }
 
   static async fetchUserCredencials(

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "../styles/components/SongBar.module.scss";
 import {
   Shuffle,
@@ -10,11 +10,9 @@ import {
   Fullscreen,
   PauseCircleOutline,
 } from "@material-ui/icons";
-
-import { SpotifySDKContext } from "../contexts/spotifysdk";
-
+import { SpotifyContext } from "../contexts/spotify";
+import { millisecondsToMinutesAndSeconds } from "../utils";
 export default function SongBar() {
-  useEffect(() => {}, []);
   const {
     currentSong,
     currentArtist,
@@ -22,13 +20,25 @@ export default function SongBar() {
     shuffle,
     repeatMode,
     changeVolume,
-    paused,
+    isPaused,
     togglePlay,
     nextSong,
     previousSong,
     toggleShuffle,
     changeRepeatMode,
-  } = useContext(SpotifySDKContext);
+    currentSongDuration,
+    currentSongPosition,
+    setCurrentSongPosition,
+    setCurrentSongTime,
+  } = useContext(SpotifyContext);
+
+  useEffect(() => {
+    if (!isPaused && currentSongDuration > currentSongPosition) {
+      setTimeout(() => {
+        setCurrentSongTime(1000);
+      }, 1000);
+    }
+  }, [isPaused, currentSongPosition]);
 
   function handleChangeVolume(event: React.ChangeEvent<HTMLInputElement>) {
     changeVolume(parseInt(event.currentTarget.value) / 100);
@@ -54,6 +64,7 @@ export default function SongBar() {
   function handleChangeRepeatMode() {
     changeRepeatMode();
   }
+
   return (
     <>
       <div className={styles.songBarContainer}>
@@ -67,8 +78,18 @@ export default function SongBar() {
           </div>
           <div className={styles.songProgress}>
             <div>
-              <input type="range" min="1" max="100" className={styles.slider} />
-              <span>1:33~3:23</span>
+              <input
+                type="range"
+                min="1"
+                max={currentSongDuration}
+                value={currentSongPosition}
+                step="0.1"
+                className={styles.slider}
+              />
+              <span>
+                {millisecondsToMinutesAndSeconds(currentSongPosition)}~
+                {millisecondsToMinutesAndSeconds(currentSongDuration)}
+              </span>
             </div>
             <div>
               <div
@@ -83,7 +104,7 @@ export default function SongBar() {
                 <SkipPrevious />
               </div>
               <div className={styles.iconButton} onClick={handleTogglePlay}>
-                {paused ? <PlayCircleOutline /> : <PauseCircleOutline />}
+                {isPaused ? <PlayCircleOutline /> : <PauseCircleOutline />}
               </div>
               <div className={styles.iconButton} onClick={handleNextSong}>
                 <SkipNext />

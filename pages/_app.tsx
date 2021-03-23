@@ -1,6 +1,6 @@
 import "../styles/globals.scss";
 import { useEffect, useState } from "react";
-import { SpotifySDKProvider } from "../contexts/spotifysdk";
+import { SpotifyProvider } from "../contexts/spotify";
 import { SpotifyAPI } from "../services/spotifyapi";
 import { initSpotifySDK } from "../services/spotifysdk";
 import Cookies from "js-cookie";
@@ -22,9 +22,9 @@ function MyApp({ Component, pageProps }) {
   if (authenticated) {
     return (
       <>
-        <SpotifySDKProvider>
+        <SpotifyProvider>
           <Component {...pageProps} />
-        </SpotifySDKProvider>
+        </SpotifyProvider>
       </>
     );
   } else {

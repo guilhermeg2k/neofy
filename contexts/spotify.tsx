@@ -1,36 +1,43 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { spotifySDK } from "../services/spotifysdk";
 import { SpotifyAPI } from "../services/spotifyapi";
-
-interface SpotifySDKProviderProps {
+import Cookies from "js-cookie";
+interface SpotifyProviderProps {
   children: ReactNode;
 }
 
-interface SpotifySDKContextData {
+interface SpotifyContextData {
   currentSong: string;
   currentArtist: string;
   albumImgURL: string;
   shuffle: boolean;
-  paused: boolean;
+  isPaused: boolean;
   repeatMode: number;
+  currentSongPosition: number;
+  currentSongDuration: number;
   changeVolume: (value: number) => void;
   togglePlay: () => void;
   nextSong: () => void;
   previousSong: () => void;
   toggleShuffle: () => void;
   changeRepeatMode: () => void;
+  setCurrentSongPosition: (value: number) => void;
+  setCurrentSongTime: (value: number) => void;
 }
 
-export const SpotifySDKContext = createContext({} as SpotifySDKContextData);
+export const SpotifyContext = createContext({} as SpotifyContextData);
 
-export function SpotifySDKProvider({ children }: SpotifySDKProviderProps) {
+export function SpotifyProvider({ children }: SpotifyProviderProps) {
   const spotifyAPI = new SpotifyAPI();
+
   const [currentSong, setCurrentSong] = useState("");
   const [currentArtist, setCurrentArtist] = useState("");
   const [albumImgURL, setAlbumImgUrl] = useState("");
   const [shuffle, setShuffle] = useState(false);
-  const [paused, setPaused] = useState(true);
+  const [isPaused, setIsPaused] = useState(true);
   const [repeatMode, setRepeatMode] = useState(0);
+  const [currentSongPosition, setCurrentSongPosition] = useState(0);
+  const [currentSongDuration, setCurrentSongDuration] = useState(0);
 
   function changeVolume(newVolume: number) {
     spotifySDK.changeVolume(newVolume);
@@ -64,7 +71,18 @@ export function SpotifySDKProvider({ children }: SpotifySDKProviderProps) {
 
     spotifyAPI.setRepeatMode(newRepeatMode);
   }
+
+  function setCurrentSongTime(value: number) {
+    setCurrentSongPosition(currentSongPosition + value);
+  }
+
   useEffect(() => {
+    spotifySDK.onReady(({ device_id }) => {
+      console.log("Ready with Device ID", device_id);
+      Cookies.set("device-id", device_id);
+      spotifyAPI.playCurrentPlayBack();
+    });
+
     spotifySDK.onStateChange((state) => {
       let { current_track } = state.track_window;
       setCurrentSong(current_track.name);
@@ -72,13 +90,15 @@ export function SpotifySDKProvider({ children }: SpotifySDKProviderProps) {
       setAlbumImgUrl(current_track.album.images[0].url);
       setShuffle(state.shuffle);
       setRepeatMode(state.repeat_mode);
-      setPaused(state.paused);
+      setIsPaused(state.paused);
+      setCurrentSongDuration(current_track.duration_ms);
+      setCurrentSongPosition(state.position);
       console.log(state);
     });
   }, []);
 
   return (
-    <SpotifySDKContext.Provider
+    <SpotifyContext.Provider
       value={{
         currentSong,
         currentArtist,
@@ -87,14 +107,18 @@ export function SpotifySDKProvider({ children }: SpotifySDKProviderProps) {
         repeatMode,
         changeVolume,
         togglePlay,
-        paused,
+        isPaused,
         previousSong,
         nextSong,
         toggleShuffle,
         changeRepeatMode,
+        currentSongDuration,
+        currentSongPosition,
+        setCurrentSongPosition,
+        setCurrentSongTime,
       }}
     >
       {children}
-    </SpotifySDKContext.Provider>
+    </SpotifyContext.Provider>
   );
 }
