@@ -29,16 +29,20 @@ export default function SongBar() {
     currentSongDuration,
     currentSongPosition,
     setCurrentSongPosition,
-    setCurrentSongTime,
   } = useContext(SpotifyContext);
 
   useEffect(() => {
+    let timeOut;
     if (!isPaused && currentSongDuration > currentSongPosition) {
-      setTimeout(() => {
-        setCurrentSongTime(1000);
+      timeOut = setTimeout(() => {
+        setCurrentSongPosition(currentSongPosition + 1000);
       }, 1000);
     }
-  }, [isPaused, currentSongPosition]);
+    return () => {
+      clearTimeout(timeOut);
+    }
+  }, [isPaused, currentSongPosition, currentSongDuration]);
+
 
   function handleChangeVolume(event: React.ChangeEvent<HTMLInputElement>) {
     changeVolume(parseInt(event.currentTarget.value) / 100);
