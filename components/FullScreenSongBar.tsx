@@ -1,22 +1,16 @@
 import { useContext, useEffect } from "react";
-import Link from "next/link";
-import styles from "../styles/components/SongBar.module.scss";
+import styles from "../styles/components/FullScreenSongBar.module.scss";
 import {
   Shuffle,
   SkipPrevious,
   SkipNext,
   PlayCircleOutline,
   Replay,
-  VolumeUp,
-  Fullscreen,
   PauseCircleOutline,
 } from "@material-ui/icons";
 import { SpotifyContext } from "../contexts/spotify";
-export default function SongBar() {
+export default function FullScreenSongBar() {
   const {
-    currentSong,
-    currentArtist,
-    albumImgURL,
     shuffle,
     repeatMode,
     changeVolume,
@@ -76,14 +70,18 @@ export default function SongBar() {
   return (
     <>
       <div className={styles.songBarContainer}>
+      <div className={styles.songProgress}>
+          <input
+            type="range"
+            min="0"
+            max={currentSongDuration}
+            value={currentSongPosition}
+            onChange={handleChangeSongPosition}
+            step="0.1"
+            className={styles.slider}
+          />
+        </div>
         <main>
-          <div className={styles.songInfo}>
-            {albumImgURL ? <img src={albumImgURL} alt="album-cover" /> : <></>}
-            <div>
-              <h3>{currentSong}</h3>
-              <h4>{currentArtist}</h4>
-            </div>
-          </div>
           <div className={styles.centerControlls}>
             <div
               className={`${styles.iconButton} ${shuffle ? "active" : ""
@@ -111,33 +109,8 @@ export default function SongBar() {
               {repeatMode === 2 ? <span>²</span> : <></>}
             </div>
           </div>
-          <div className={styles.rightControlls}>
-            <VolumeUp />
-            <input
-              type="range"
-              min="0"
-              max="100"
-              className={styles.slider}
-              onChange={handleChangeVolume}
-            />
-            <Link href="/fullscreen">
-              <div className={styles.iconButton}>
-                <Fullscreen />
-              </div>
-            </Link>
-          </div>
         </main>
-        <div className={styles.songProgress}>
-          <input
-            type="range"
-            min="0"
-            max={currentSongDuration}
-            value={currentSongPosition}
-            onChange={handleChangeSongPosition}
-            step="0.1"
-            className={styles.slider}
-          />
-        </div>
+        
       </div>
     </>
   );

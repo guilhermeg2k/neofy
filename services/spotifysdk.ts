@@ -32,7 +32,9 @@ export interface WebPlayblackPlayer {
 export interface WebPlaybackState {
   context: {
     uri: string; // The URI of the context (can be void)
-    metadata: {}; // Additional metadata for the context (can be void)
+    metadata: {
+      context_description: string;
+    }; // Additional metadata for the context (can be void)
   };
   disallows: {
     // A simplified set of restriction controls for
@@ -68,7 +70,7 @@ export interface WebPlaybackTrack {
   album: {
     uri: string; // Spotify Album URI
     name: string;
-    images: [{ url: string }];
+    images: [{ url: string }, { url: string }, { url: string }];
   };
   artists: [{ uri: string; name: string }];
 }

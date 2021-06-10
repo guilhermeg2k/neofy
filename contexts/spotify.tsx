@@ -10,11 +10,17 @@ interface SpotifyContextData {
   currentSong: string;
   currentArtist: string;
   albumImgURL: string;
+  albumMediumImgURL: string;
+  albumLargeImgURL: string;
   shuffle: boolean;
   isPaused: boolean;
   repeatMode: number;
   currentSongPosition: number;
   currentSongDuration: number;
+  currentContext: {
+    type: string,
+    name: string,
+  };
   changeVolume: (value: number) => void;
   togglePlay: () => void;
   nextSong: () => void;
@@ -33,12 +39,17 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
   const [currentSong, setCurrentSong] = useState("");
   const [currentArtist, setCurrentArtist] = useState("");
   const [albumImgURL, setAlbumImgUrl] = useState("");
+  const [albumMediumImgURL, setMediumAlbumImgUrl] = useState("");
+  const [albumLargeImgURL, setLargeAlbumImgUrl] = useState("");
   const [shuffle, setShuffle] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
   const [repeatMode, setRepeatMode] = useState(0);
   const [currentSongPosition, setCurrentSongPosition] = useState(0);
   const [currentSongDuration, setCurrentSongDuration] = useState(0);
-
+  const [currentContext, setCurrentContext] = useState({
+    type: "",
+    name: ""
+  });
   function changeVolume(newVolume: number) {
     spotifySDK.changeVolume(newVolume);
   }
@@ -59,7 +70,7 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     spotifyAPI.setShuffle(!shuffle);
   }
 
-  function seekToPosition(position: number){
+  function seekToPosition(position: number) {
     spotifySDK.seekToPosition(position);
   }
 
@@ -84,15 +95,24 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     });
 
     spotifySDK.onStateChange((state) => {
+      let { context } = state;
       let { current_track } = state.track_window;
+
       setCurrentSong(current_track.name);
       setCurrentArtist(current_track.artists[0].name);
       setAlbumImgUrl(current_track.album.images[0].url);
+      setMediumAlbumImgUrl(current_track.album.images[1].url);
+      setLargeAlbumImgUrl(current_track.album.images[2].url);
       setShuffle(state.shuffle);
       setRepeatMode(state.repeat_mode);
       setIsPaused(state.paused);
       setCurrentSongDuration(current_track.duration_ms);
       setCurrentSongPosition(state.position);
+      setCurrentContext({
+        type: context.uri.includes("playlist") ? "playlist" : context.uri.includes("artist") ? "artist" : "album",
+        name: context.metadata.context_description
+      })
+
       console.log(state);
     });
   }, []);
@@ -103,6 +123,8 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
         currentSong,
         currentArtist,
         albumImgURL,
+        albumMediumImgURL,
+        albumLargeImgURL,
         shuffle,
         repeatMode,
         changeVolume,
@@ -115,7 +137,8 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
         currentSongDuration,
         currentSongPosition,
         setCurrentSongPosition,
-        seekToPosition
+        seekToPosition,
+        currentContext,
       }}
     >
       {children}

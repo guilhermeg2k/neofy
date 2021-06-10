@@ -1,5 +1,9 @@
 @use 'vars';
 
+.active {
+  color: vars.$primary;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -20,7 +24,8 @@ button {
 h1,
 h2,
 h3,
-h4 {
+h4,
+p {
   font: 400 16px "Ubuntu", sans-serif;
 }
 
