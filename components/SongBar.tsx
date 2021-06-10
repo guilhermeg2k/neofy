@@ -49,7 +49,7 @@ export default function SongBar() {
     changeVolume(parseInt(event.currentTarget.value) / 100);
     console.log(event.currentTarget.value);
   }
-  function handleChangeSongPosition(event: React.ChangeEvent<HTMLInputElement>){
+  function handleChangeSongPosition(event: React.ChangeEvent<HTMLInputElement>) {
     console.log(event.currentTarget.value);
     seekToPosition(parseFloat(event.currentTarget.value));
   }
@@ -84,53 +84,32 @@ export default function SongBar() {
               <h4>{currentArtist}</h4>
             </div>
           </div>
-          <div className={styles.songProgress}>
-          <div>
-              <div
-                className={`${styles.iconButton} ${
-                  shuffle ? styles.active : ""
+          <div className={styles.centerControlls}>
+            <div
+              className={`${styles.iconButton} ${shuffle ? styles.active : ""
                 }`}
-                onClick={handleToggleShuffle}
-              >
-                <Shuffle />
-              </div>
-              <div className={styles.iconButton} onClick={handlePreviousSong}>
-                <SkipPrevious />
-              </div>
-              <div className={styles.iconButton} onClick={handleTogglePlay}>
-                {isPaused ? <PlayCircleOutline /> : <PauseCircleOutline />}
-              </div>
-              <div className={styles.iconButton} onClick={handleNextSong}>
-                <SkipNext />
-              </div>
-              <div
-                className={`${styles.iconButton} ${
-                  repeatMode != 0 ? styles.active : ""
+              onClick={handleToggleShuffle}
+            >
+              <Shuffle />
+            </div>
+            <div className={styles.iconButton} onClick={handlePreviousSong}>
+              <SkipPrevious />
+            </div>
+            <div className={styles.iconButton} onClick={handleTogglePlay}>
+              {isPaused ? <PlayCircleOutline /> : <PauseCircleOutline />}
+            </div>
+            <div className={styles.iconButton} onClick={handleNextSong}>
+              <SkipNext/>
+            </div>
+            <div
+              className={`${styles.iconButton} ${repeatMode != 0 ? styles.active : ""
                 }`}
-                onClick={handleChangeRepeatMode}
-              >
-                <Replay />
-                {repeatMode === 1 ? <span>¹</span> : <></>}
-                {repeatMode === 2 ? <span>²</span> : <></>}
-              </div>
+              onClick={handleChangeRepeatMode}
+            >
+              <Replay />
+              {repeatMode === 1 ? <span>¹</span> : <></>}
+              {repeatMode === 2 ? <span>²</span> : <></>}
             </div>
-
-            <div>
-              <input
-                type="range"
-                min="1"
-                max={currentSongDuration}
-                value={currentSongPosition}
-                onChange={handleChangeSongPosition}
-                step="0.1"
-                className={styles.slider}
-              />
-              <span>
-                {millisecondsToMinutesAndSeconds(currentSongPosition)}~
-                {millisecondsToMinutesAndSeconds(currentSongDuration)}
-              </span>
-            </div>
-            
           </div>
           <div className={styles.rightControlls}>
             <VolumeUp />
@@ -146,6 +125,17 @@ export default function SongBar() {
             </div>
           </div>
         </main>
+        <div className={styles.songProgress}>
+          <input
+            type="range"
+            min="0"
+            max={currentSongDuration}
+            value={currentSongPosition}
+            onChange={handleChangeSongPosition}
+            step="0.1"
+            className={styles.slider}
+          />
+        </div>
       </div>
     </>
   );
