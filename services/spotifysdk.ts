@@ -167,4 +167,8 @@ class SpotifySDK {
   previousSong() {
     this.player?.previousTrack();
   }
+
+  seekToPosition(position: number){
+    this.player?.seek(position);
+  }
 }

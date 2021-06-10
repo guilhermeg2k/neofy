@@ -7,7 +7,9 @@
 .songBarContainer {
   height: 96px;
   background-color: vars.$dark-1;
-
+  position: fixed; 
+  bottom:0%;
+  width:100%; 
   main {
     max-width: 1668px;
     margin: auto;
@@ -50,6 +52,9 @@
   padding: 5px 50px;
   div {
     &:first-child {
+      display: flex;
+    }
+    &:last-child {
       width: 100%;
       display: flex;
       span {
@@ -58,9 +63,6 @@
       .slider {
         margin-right: 5px;
       }
-    }
-    &:last-child {
-      display: flex;
     }
   }
 }

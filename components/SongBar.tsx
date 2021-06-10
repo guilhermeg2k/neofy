@@ -29,6 +29,7 @@ export default function SongBar() {
     currentSongDuration,
     currentSongPosition,
     setCurrentSongPosition,
+    seekToPosition
   } = useContext(SpotifyContext);
 
   useEffect(() => {
@@ -48,7 +49,10 @@ export default function SongBar() {
     changeVolume(parseInt(event.currentTarget.value) / 100);
     console.log(event.currentTarget.value);
   }
-
+  function handleChangeSongPosition(event: React.ChangeEvent<HTMLInputElement>){
+    console.log(event.currentTarget.value);
+    seekToPosition(parseFloat(event.currentTarget.value));
+  }
   function handleTogglePlay() {
     togglePlay();
   }
@@ -81,21 +85,7 @@ export default function SongBar() {
             </div>
           </div>
           <div className={styles.songProgress}>
-            <div>
-              <input
-                type="range"
-                min="1"
-                max={currentSongDuration}
-                value={currentSongPosition}
-                step="0.1"
-                className={styles.slider}
-              />
-              <span>
-                {millisecondsToMinutesAndSeconds(currentSongPosition)}~
-                {millisecondsToMinutesAndSeconds(currentSongDuration)}
-              </span>
-            </div>
-            <div>
+          <div>
               <div
                 className={`${styles.iconButton} ${
                   shuffle ? styles.active : ""
@@ -124,12 +114,29 @@ export default function SongBar() {
                 {repeatMode === 2 ? <span>²</span> : <></>}
               </div>
             </div>
+
+            <div>
+              <input
+                type="range"
+                min="1"
+                max={currentSongDuration}
+                value={currentSongPosition}
+                onChange={handleChangeSongPosition}
+                step="0.1"
+                className={styles.slider}
+              />
+              <span>
+                {millisecondsToMinutesAndSeconds(currentSongPosition)}~
+                {millisecondsToMinutesAndSeconds(currentSongDuration)}
+              </span>
+            </div>
+            
           </div>
           <div className={styles.rightControlls}>
             <VolumeUp />
             <input
               type="range"
-              min="1"
+              min="0"
               max="100"
               className={styles.slider}
               onChange={handleChangeVolume}

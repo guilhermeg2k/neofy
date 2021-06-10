@@ -22,6 +22,7 @@ interface SpotifyContextData {
   toggleShuffle: () => void;
   changeRepeatMode: () => void;
   setCurrentSongPosition: (value: number) => void;
+  seekToPosition: (position: number) => void;
 }
 
 export const SpotifyContext = createContext({} as SpotifyContextData);
@@ -56,6 +57,10 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
 
   function toggleShuffle() {
     spotifyAPI.setShuffle(!shuffle);
+  }
+
+  function seekToPosition(position: number){
+    spotifySDK.seekToPosition(position);
   }
 
   function changeRepeatMode() {
@@ -109,7 +114,8 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
         changeRepeatMode,
         currentSongDuration,
         currentSongPosition,
-        setCurrentSongPosition
+        setCurrentSongPosition,
+        seekToPosition
       }}
     >
       {children}
