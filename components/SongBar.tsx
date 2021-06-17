@@ -120,7 +120,7 @@ export default function SongBar() {
               className={styles.slider}
               onChange={handleChangeVolume}
             />
-            <Link href="/fullscreen">
+            <Link href="/fullscreen" >
               <div className={styles.iconButton}>
                 <Fullscreen />
               </div>

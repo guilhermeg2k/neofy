@@ -79,9 +79,10 @@ export interface WebPlaybackError {
   message: string;
 }
 
-export let spotifySDK: SpotifySDK;
+export var spotifySDK: SpotifySDK;
+
 export function initSpotifySDK() {
-  if (typeof window !== "undefined") {
+  if (process.browser) {
     const token = SpotifyAPI.userCredencials.acessToken;
     spotifySDK = new SpotifySDK(token);
   }
@@ -164,6 +165,9 @@ class SpotifySDK {
 
   nextSong() {
     this.player?.nextTrack();
+    console.log("next song");
+    console.log(this.player);
+    console.log(spotifySDK);
   }
 
   previousSong() {

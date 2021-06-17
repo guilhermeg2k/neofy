@@ -8,8 +8,6 @@ import Cookies from "js-cookie";
 function MyApp({ Component, pageProps }) {
   const [authenticated, setAuthenticated] = useState(false);
 
-  initSpotifySDK();
-
   useEffect(() => {
     const authStatus = Cookies.get("auth-status");
     if (authStatus === "failed" || !authStatus) {
@@ -17,6 +15,7 @@ function MyApp({ Component, pageProps }) {
     } else {
       setAuthenticated(true);
     }
+    initSpotifySDK();
   }, []);
 
   if (authenticated) {

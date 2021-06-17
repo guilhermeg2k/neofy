@@ -50,6 +50,7 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     type: "",
     name: ""
   });
+
   function changeVolume(newVolume: number) {
     spotifySDK.changeVolume(newVolume);
   }
@@ -80,8 +81,6 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
       newRepeatMode = 1;
     } else if (repeatMode === 1) {
       newRepeatMode = 2;
-    } else {
-      newRepeatMode = 0;
     }
 
     spotifyAPI.setRepeatMode(newRepeatMode);

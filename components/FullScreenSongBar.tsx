@@ -30,8 +30,8 @@ export default function FullScreenSongBar() {
     let timeOut;
     if (!isPaused && currentSongDuration > currentSongPosition) {
       timeOut = setTimeout(() => {
-        setCurrentSongPosition(currentSongPosition + 1000);
-      }, 1000);
+        setCurrentSongPosition(currentSongPosition + 150);
+      }, 100);
     }
     return () => {
       clearTimeout(timeOut);
