@@ -44,7 +44,6 @@ export default function Fullscreen() {
             </p>
           </div>
         </main>
-
       </div>
       <FullScreenSongBar />
     </div>

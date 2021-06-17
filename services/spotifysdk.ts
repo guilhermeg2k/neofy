@@ -165,9 +165,6 @@ class SpotifySDK {
 
   nextSong() {
     this.player?.nextTrack();
-    console.log("next song");
-    console.log(this.player);
-    console.log(spotifySDK);
   }
 
   previousSong() {
