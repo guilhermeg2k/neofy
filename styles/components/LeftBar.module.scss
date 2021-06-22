@@ -1,28 +1,32 @@
 @use "../vars";
-.leftBarContainer{
+.leftBarContainer {
     background-color: vars.$dark-1;
     position: fixed;
     top: 102px;
-    width: 55px;
     height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
-.leftBarWrapper{
+.leftBarWrapper {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
 .iconButton {
     display: flex;
     align-items: center;
     padding: 15px 0;
-    svg{
+    span {
+        margin: 0 10px 0 0;
+    }
+    svg {
         transform: scale(1.1);
+        margin: 0 10px;
     }
     &:hover {
-      color: vars.$primary;
-      cursor: pointer;
+        color: vars.$primary;
+        cursor: pointer;
     }
-  }
+}
