@@ -1,6 +1,9 @@
 @use "../vars";
 
 .songBarContainer {
+  position: fixed;
+  width: 100%;
+  top:0;
   height: 96px;
   background-color: vars.$dark-1;
   main {
@@ -124,6 +127,7 @@
 .iconButton {
   display: flex;
   align-items: center;
+  transition: all 0.2s ease;
   &:hover {
     color: vars.$primary;
     cursor: pointer;

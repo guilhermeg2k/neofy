@@ -7,6 +7,7 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    
 }
 
 .leftBarWrapper {
@@ -18,12 +19,13 @@
     display: flex;
     align-items: center;
     padding: 15px 0;
+    transition: all 0.2s ease;
     span {
-        margin: 0 10px 0 0;
+        margin: 0 15px 0 0;
     }
     svg {
-        transform: scale(1.1);
-        margin: 0 10px;
+        transform: scale(1.05);
+        margin: 0 15px;
     }
     &:hover {
         color: vars.$primary;

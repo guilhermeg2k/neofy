@@ -1,0 +1,35 @@
+@use "../vars";
+
+.homeContainer{
+    margin-top: 102px;
+    padding: 0 40px;
+}
+
+.homeWrapper{
+    padding: 0 50px;
+}
+
+.homeSection{
+    h1{
+        font-size: 1.35rem;
+        margin: 10px 0;
+    }
+    ul{
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+@media (min-width: vars.$medium) {
+    .homeWrapper{
+        max-width: 900px;
+        margin: auto;
+        padding: 0;
+    }
+}
+
+@media (min-width: vars.$extra-large) {
+    .homeWrapper{
+        max-width: 1270px;
+    }
+}

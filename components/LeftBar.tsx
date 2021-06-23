@@ -11,7 +11,7 @@ import {
 export default function LeftBar() {
   const [hideLabel, setHideLabel] = useState(true);
   return (
-    <nav className={styles.leftBarContainer}>
+    <aside className={styles.leftBarContainer}>
       <div className={styles.leftBarWrapper}>
         <div
           className={styles.iconButton}
@@ -62,6 +62,6 @@ export default function LeftBar() {
           <span className={hideLabel ? "hidden" : ""}>Albums</span>
         </div>
       </div>
-    </nav>
+    </aside>
   )
 }
