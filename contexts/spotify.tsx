@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { spotifySDK } from "../services/spotifysdk";
-import { SpotifyAPI } from "../services/spotifyapi";
+import { PlaylistObject, SpotifyAPI } from "../services/spotifyapi";
 import Cookies from "js-cookie";
 interface SpotifyProviderProps {
   children: ReactNode;
@@ -29,6 +29,7 @@ interface SpotifyContextData {
   changeRepeatMode: () => void;
   setCurrentSongPosition: (value: number) => void;
   seekToPosition: (position: number) => void;
+  getCurrentUserPlayLists: () => Promise<Array<PlaylistObject>>;
 }
 
 export const SpotifyContext = createContext({} as SpotifyContextData);
@@ -82,8 +83,11 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     } else if (repeatMode === 1) {
       newRepeatMode = 2;
     }
-
     spotifyAPI.setRepeatMode(newRepeatMode);
+  }
+
+  async function getCurrentUserPlayLists(): Promise<Array<PlaylistObject>>{
+    return await spotifyAPI.getCurrentUserPlayLists();
   }
 
   useEffect(() => {
@@ -138,6 +142,7 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
         setCurrentSongPosition,
         seekToPosition,
         currentContext,
+        getCurrentUserPlayLists
       }}
     >
       {children}

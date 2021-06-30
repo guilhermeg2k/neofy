@@ -10,6 +10,56 @@ export interface UserCredencials {
   refreshToken: string;
 }
 
+export interface ExternalUrlObject{
+  spotify: string;
+}
+
+export interface FollowersObject{
+  href: string;
+  total: number;
+}
+
+export interface PublicUserObject{
+  display_name: string;
+  external_url: ExternalUrlObject;
+  followers: FollowersObject;
+  href: string;
+  id: string;
+  images: Array<Image>;
+  type: string;
+  uri: string;
+}
+
+//TODO: Create the TrackObject
+export interface PlaylistTrackObject{
+  added_at: Date;
+  added_by: PublicUserObject;
+  is_local: boolean;
+  track: string;
+}
+
+export interface PlaylistObject{
+  collaborative: boolean;
+  description: string;
+  id: string;
+  external_urls: ExternalUrlObject;
+  followers: FollowersObject;
+  images: Array<Image>;
+  name: string;
+  owner: PublicUserObject;
+  public: boolean;
+  snapshot_id: string;
+  tracks: Array<PlaylistTrackObject>;
+  type: string;
+  uri: string;
+}
+
+export interface Image{
+  height: number;
+  url: string;
+  width: string;
+}
+
 export class SpotifyAPI {
   private axios: AxiosInstance;
   static clientID = "eca09370790043d6a575e301b2da83ca";
@@ -21,6 +71,8 @@ export class SpotifyAPI {
     "user-follow-modify",
     "user-read-playback-state",
     "user-modify-playback-state",
+    "playlist-read-private",
+    "playlist-read-collaborative"
   ];
 
   constructor() {
@@ -87,6 +139,22 @@ export class SpotifyAPI {
       console.log(response);
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  async getCurrentUserPlayLists(): Promise<Array<PlaylistObject>>{
+    try {
+      const response = await this.axios.get(
+        `/me/playlists`
+      );
+      return new Promise((resolve, reject) => {
+        resolve(response.data.items);
+      });
+    } catch (err) {
+      console.log(err);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
     }
   }
 

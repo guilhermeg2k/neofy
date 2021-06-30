@@ -1,12 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import styles from "../styles/pages/Home.module.scss";
 import SongBar from "../components/SongBar";
 import LeftBar from "../components/LeftBar";
 import SongCard from "../components/SongCard";
-
+import { SpotifyContext } from "../contexts/spotify";
+import { PlaylistObject } from '../services/spotifyapi';
 
 let arr = [1, 2, 34];
 export default function Home() {
+  const {
+    getCurrentUserPlayLists
+  } = useContext(SpotifyContext);
+
+  const [playLists, setPlayLists] = useState(Array<PlaylistObject>());
+
+  useEffect(()=> {
+    async function fetchAPI(){
+      setPlayLists(await getCurrentUserPlayLists());
+    }
+    fetchAPI();
+  }, []); 
+
   return (
     <>
       <SongBar />
@@ -14,14 +28,14 @@ export default function Home() {
       <main className={styles.homeContainer}>
         <div className={styles.homeWrapper}>
           <section className={styles.homeSection}>
-            <h1>Recently played</h1>
+            <h1>Playlists</h1>
             <ul>
               {
-                [1, 2, 3].map(key =>
+                playLists.map(playList =>
                   <SongCard
-                    title={`Don't smile at me`}
-                    subtitle="by billie eilish"
-                    coverURL="https://i.scdn.co/image/ab67616d0000b273a9f6c04ba168640b48aa5795"
+                    title={ playList.name }
+                    subtitle={ playList.owner.display_name }
+                    coverURL={ playList.images[0].url }
                   />)
               }
             </ul>

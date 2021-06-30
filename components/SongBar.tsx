@@ -13,6 +13,8 @@ import {
 } from "@material-ui/icons";
 import { SpotifyContext } from "../contexts/spotify";
 export default function SongBar() {
+  
+
   const {
     currentSong,
     currentArtist,
