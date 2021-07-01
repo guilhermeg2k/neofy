@@ -25,7 +25,7 @@ export interface PublicUserObject{
   followers: FollowersObject;
   href: string;
   id: string;
-  images: Array<Image>;
+  images: Array<ImageObject>;
   type: string;
   uri: string;
 }
@@ -44,7 +44,7 @@ export interface PlaylistObject{
   id: string;
   external_urls: ExternalUrlObject;
   followers: FollowersObject;
-  images: Array<Image>;
+  images: Array<ImageObject>;
   name: string;
   owner: PublicUserObject;
   public: boolean;
@@ -54,10 +54,29 @@ export interface PlaylistObject{
   uri: string;
 }
 
-export interface Image{
+export interface ArtistObject{
+  external_urls: ExternalUrlObject;
+  followers: FollowersObject;
+  genres: Array<string>;
+  href: string;
+  id: string;
+  images: Array<ImageObject>;
+  name: string;
+  popularity: number;
+  type: string;
+  uri: string;
+}
+
+export interface ImageObject{
   height: number;
   url: string;
   width: string;
+}
+
+export enum TimeRange {
+  long_term,
+  medium_term,
+  short_term
 }
 
 export class SpotifyAPI {
@@ -72,7 +91,8 @@ export class SpotifyAPI {
     "user-read-playback-state",
     "user-modify-playback-state",
     "playlist-read-private",
-    "playlist-read-collaborative"
+    "playlist-read-collaborative",
+    "user-top-read"
   ];
 
   constructor() {
@@ -146,6 +166,22 @@ export class SpotifyAPI {
     try {
       const response = await this.axios.get(
         `/me/playlists`
+      );
+      return new Promise((resolve, reject) => {
+        resolve(response.data.items);
+      });
+    } catch (err) {
+      console.log(err);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+  }
+
+  async getUserTopArtists(timeRange: TimeRange, limit: number, offset: number): Promise<Array<ArtistObject>>{
+    try {
+      const response = await this.axios.get(
+        `/me/top/artists?time_range=${TimeRange[timeRange]}&limit=${limit}&offset=${offset}`
       );
       return new Promise((resolve, reject) => {
         resolve(response.data.items);

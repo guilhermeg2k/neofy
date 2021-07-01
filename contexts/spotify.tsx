@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { spotifySDK } from "../services/spotifysdk";
-import { PlaylistObject, SpotifyAPI } from "../services/spotifyapi";
+import { ArtistObject, PlaylistObject, SpotifyAPI, TimeRange } from "../services/spotifyapi";
 import Cookies from "js-cookie";
 interface SpotifyProviderProps {
   children: ReactNode;
@@ -30,6 +30,7 @@ interface SpotifyContextData {
   setCurrentSongPosition: (value: number) => void;
   seekToPosition: (position: number) => void;
   getCurrentUserPlayLists: () => Promise<Array<PlaylistObject>>;
+  getUserTopArtists: () => Promise<Array<ArtistObject>>;
 }
 
 export const SpotifyContext = createContext({} as SpotifyContextData);
@@ -90,6 +91,10 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     return await spotifyAPI.getCurrentUserPlayLists();
   }
 
+  async function getUserTopArtists(timeRange = TimeRange.short_term, limit = 10, offset = 0){
+    return await spotifyAPI.getUserTopArtists(timeRange, limit, offset);
+  }
+
   useEffect(() => {
     spotifySDK.onReady(({ device_id }) => {
       console.log("Ready with Device ID", device_id);
@@ -142,7 +147,8 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
         setCurrentSongPosition,
         seekToPosition,
         currentContext,
-        getCurrentUserPlayLists
+        getCurrentUserPlayLists,
+        getUserTopArtists
       }}
     >
       {children}
