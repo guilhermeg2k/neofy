@@ -30,7 +30,6 @@ export interface PublicUserObject{
   uri: string;
 }
 
-//TODO: Create the TrackObject
 export interface PlaylistTrackObject{
   added_at: Date;
   added_by: PublicUserObject;
@@ -73,11 +72,129 @@ export interface ImageObject{
   width: string;
 }
 
+export interface TrackObject{
+  album: SimplifiedAlbumObject;
+  artists: Array<ArtistObject>;
+  available_markets: Array<string>;
+  disc_number: number;
+  duration_ms: number;
+  explicit: boolean;
+  external_ids: ExternalIdObject;
+  external_urls: ExternalUrlObject;
+  href: string;
+  id: string;
+  is_local: boolean;
+  is_playable: boolean;
+  linked_from: LinkedTrackObject;
+  name: string;
+  popularity: number;
+  preview_url: string;
+  restrictions: TrackRestrictionObject;
+  track_number: number;
+  type: string;
+  uri: string;
+}
+
+export interface SimplifiedTrackObject{
+  artists: Array<ArtistObject>;
+  available_markets: Array<string>;
+  disc_number: number;
+  duration_ms: number;
+  explicit: boolean;
+  external_urls: ExternalUrlObject;
+  href: string;
+  id: string;
+  is_local: boolean;
+  is_playable: boolean;
+  linked_from: LinkedTrackObject;
+  name: string;
+  preview_url: string;
+  restrictions: TrackRestrictionObject;
+  track_number: number;
+  type: string;
+  uri: string;
+}
+
+export interface TrackRestrictionObject{
+  reaason: string;
+}
+
+export interface LinkedTrackObject{
+  external_urls: ExternalUrlObject;
+  href: string;
+  id: string;
+  type: string;
+  uri: string;
+}
+
+export interface SimplifiedAlbumObject{
+  album_group: string;
+  album_type: string;
+  artists: Array<ArtistObject>;
+  available_markets: Array<string>;
+  external_urls: ExternalUrlObject;
+  href: string;
+  id: string;
+  images: Array<ImageObject>;
+  label: string;
+  name: string;
+  release_date: string;
+  release_date_precision: string;
+  restrictions: AlbumRestrictionObject;
+  total_tracks: number;
+  type: string;
+  uri: string;
+}
+
+export interface AlbumObject{
+  album_type: string;
+  artists: Array<ArtistObject>;
+  available_markets: Array<string>;
+  copyrights: Array<CopyrightObject>;
+  external_ids: ExternalIdObject;
+  external_urls: ExternalUrlObject;
+  genres: Array<string>;
+  href: string;
+  id: string;
+  images: Array<ImageObject>;
+  label: string;
+  name: string;
+  popularity: number;
+  release_date: string;
+  release_date_precision: string;
+  restrictions: AlbumRestrictionObject;
+  total_tracks: number;
+  tracks: Array<SimplifiedTrackObject>;
+  type: string;
+  uri: string;
+}
+
+
+export interface AlbumRestrictionObject{
+  reason: string;
+}
+export interface ExternalIdObject{
+  ean: string;
+  isrc: string;
+  upc: string;
+}
+
+export interface CopyrightObject{
+  text: string;
+  type: string;
+}
+export interface SavedAlbumObject{
+  added_at: Date;
+  album: AlbumObject;
+}
+
 export enum TimeRange {
   long_term,
   medium_term,
   short_term
 }
+
+
 
 export class SpotifyAPI {
   private axios: AxiosInstance;
@@ -92,7 +209,8 @@ export class SpotifyAPI {
     "user-modify-playback-state",
     "playlist-read-private",
     "playlist-read-collaborative",
-    "user-top-read"
+    "user-top-read",
+    "user-library-read"
   ];
 
   constructor() {
@@ -162,10 +280,10 @@ export class SpotifyAPI {
     }
   }
 
-  async getCurrentUserPlayLists(): Promise<Array<PlaylistObject>>{
+  async getCurrentUserPlayLists(limit: number, offset: number): Promise<Array<PlaylistObject>>{
     try {
       const response = await this.axios.get(
-        `/me/playlists`
+        `/me/playlists?limit=${limit}&offset=${offset}`
       );
       return new Promise((resolve, reject) => {
         resolve(response.data.items);
@@ -182,6 +300,38 @@ export class SpotifyAPI {
     try {
       const response = await this.axios.get(
         `/me/top/artists?time_range=${TimeRange[timeRange]}&limit=${limit}&offset=${offset}`
+      );
+      return new Promise((resolve, reject) => {
+        resolve(response.data.items);
+      });
+    } catch (err) {
+      console.log(err);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+  }
+
+  async getUserTopTracks(timeRange: TimeRange, limit: number, offset: number): Promise<Array<TrackObject>>{
+    try {
+      const response = await this.axios.get(
+        `/me/top/tracks?time_range=${TimeRange[timeRange]}&limit=${limit}&offset=${offset}`
+      );
+      return new Promise((resolve, reject) => {
+        resolve(response.data.items);
+      });
+    } catch (err) {
+      console.log(err);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+  }
+
+  async getUserSavedAlbums(limit: number, offset: number): Promise<Array<AlbumObject>>{
+    try {
+      const response = await this.axios.get(
+        `me/albums?limit=${limit}&offset=${offset}`
       );
       return new Promise((resolve, reject) => {
         resolve(response.data.items);

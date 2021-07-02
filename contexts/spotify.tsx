@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { spotifySDK } from "../services/spotifysdk";
-import { ArtistObject, PlaylistObject, SpotifyAPI, TimeRange } from "../services/spotifyapi";
+import { AlbumObject, ArtistObject, PlaylistObject, SpotifyAPI, TimeRange, TrackObject } from "../services/spotifyapi";
 import Cookies from "js-cookie";
 interface SpotifyProviderProps {
   children: ReactNode;
@@ -29,8 +29,10 @@ interface SpotifyContextData {
   changeRepeatMode: () => void;
   setCurrentSongPosition: (value: number) => void;
   seekToPosition: (position: number) => void;
-  getCurrentUserPlayLists: () => Promise<Array<PlaylistObject>>;
-  getUserTopArtists: () => Promise<Array<ArtistObject>>;
+  getCurrentUserPlayLists: (limit?: number, offset?: number) => Promise<Array<PlaylistObject>>;
+  getUserTopArtists: (timeRange?: TimeRange, limit?: number, offset?: number) => Promise<Array<ArtistObject>>;
+  getUserTopTracks: (timeRange?: TimeRange, limit?: number, offset?: number) => Promise<Array<TrackObject>>;
+  getUserSavedAlbums: (limit?: number, offset?: number) => Promise<Array<AlbumObject>>;
 }
 
 export const SpotifyContext = createContext({} as SpotifyContextData);
@@ -87,13 +89,23 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     spotifyAPI.setRepeatMode(newRepeatMode);
   }
 
-  async function getCurrentUserPlayLists(): Promise<Array<PlaylistObject>>{
-    return await spotifyAPI.getCurrentUserPlayLists();
+  async function getCurrentUserPlayLists(limit = 20, offset = 0): Promise<Array<PlaylistObject>>{
+    return await spotifyAPI.getCurrentUserPlayLists(limit, offset);
   }
 
   async function getUserTopArtists(timeRange = TimeRange.short_term, limit = 10, offset = 0){
     return await spotifyAPI.getUserTopArtists(timeRange, limit, offset);
   }
+
+  async function getUserSavedAlbums(limit = 20, offset = 0): Promise<Array<AlbumObject>>{
+    return await spotifyAPI.getUserSavedAlbums(limit, offset);
+  }
+
+  async function getUserTopTracks(timeRange = TimeRange.short_term, limit = 10, offset = 0){
+    return await spotifyAPI.getUserTopTracks(timeRange, limit, offset);
+  }
+
+  
 
   useEffect(() => {
     spotifySDK.onReady(({ device_id }) => {
@@ -148,7 +160,9 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
         seekToPosition,
         currentContext,
         getCurrentUserPlayLists,
-        getUserTopArtists
+        getUserTopArtists,
+        getUserSavedAlbums,
+        getUserTopTracks
       }}
     >
       {children}

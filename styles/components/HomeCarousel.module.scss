@@ -1,0 +1,38 @@
+@use "../vars";
+.carouselContainer{
+  main{
+    background-position: center;
+    width: 640px;
+    height: 278px;
+    border-radius: 5px;
+    > div{
+      display: flex;
+      justify-content: space-between;
+      padding: 0 25px;
+      padding-top: 215px;
+      h3{
+        color: vars.$primary;
+        font-size: 1.2rem;
+      }
+      h3, h4{
+        text-transform: uppercase;
+        font-weight: 800;
+      }
+      .playButton{
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 114px;
+        height: 42px;
+        background-color: vars.$primary;
+        font-weight: 800;
+        transition: all 0.2s ease;
+        &:hover{
+          background-color: vars.$secondary;
+        }
+      }
+      
+    }
+  }
+}
