@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
   FullscreenExit
 } from "@material-ui/icons";
-import { SpotifyContext } from "../contexts/spotify";
+import { SongBarContext } from "../contexts/songBar";
 import FullScreenSongBar from "../components/FullScreenSongBar";
 export default function Fullscreen() {
   const {
@@ -12,7 +12,7 @@ export default function Fullscreen() {
     currentArtist,
     albumLargeImgURL,
     currentContext
-  } = useContext(SpotifyContext);
+  } = useContext(SongBarContext);
   return (
     <div className={styles.fullscreenContainer}>
       <div className={styles.fullscreenWrapper}>

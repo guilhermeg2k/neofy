@@ -11,7 +11,7 @@ import {
   Fullscreen,
   PauseCircleOutline,
 } from "@material-ui/icons";
-import { SpotifyContext } from "../contexts/spotify";
+import { SongBarContext } from "../contexts/songBar";
 export default function SongBar() {
   
 
@@ -32,7 +32,7 @@ export default function SongBar() {
     currentSongPosition,
     setCurrentSongPosition,
     seekToPosition
-  } = useContext(SpotifyContext);
+  } = useContext(SongBarContext);
 
   useEffect(() => {
     let timeOut;

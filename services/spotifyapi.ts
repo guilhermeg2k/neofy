@@ -210,7 +210,8 @@ export class SpotifyAPI {
     "playlist-read-private",
     "playlist-read-collaborative",
     "user-top-read",
-    "user-library-read"
+    "user-library-read",
+    "user-follow-read"
   ];
 
   constructor() {
@@ -280,7 +281,7 @@ export class SpotifyAPI {
     }
   }
 
-  async getCurrentUserPlayLists(limit: number, offset: number): Promise<Array<PlaylistObject>>{
+  async getCurrentUserPlayLists(limit = 20, offset = 0): Promise<Array<PlaylistObject>>{
     try {
       const response = await this.axios.get(
         `/me/playlists?limit=${limit}&offset=${offset}`
@@ -328,7 +329,7 @@ export class SpotifyAPI {
     }
   }
 
-  async getUserSavedAlbums(limit: number, offset: number): Promise<Array<AlbumObject>>{
+  async getUserSavedAlbums(limit = 20, offset = 0): Promise<Array<AlbumObject>>{
     try {
       const response = await this.axios.get(
         `me/albums?limit=${limit}&offset=${offset}`
@@ -337,6 +338,39 @@ export class SpotifyAPI {
         resolve(response.data.items);
       });
     } catch (err) {
+      console.log(err);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+  }
+
+  async getUserSavedTracks(limit = 20, offset = 0 ): Promise<Array<TrackObject>>{
+    try{
+      const response = await this.axios.get(
+        `me/tracks?limit=${limit}&offset=${offset}`
+      );
+      return new Promise((resolve, reject) => {
+        resolve(response.data.items);
+      });
+    }
+    catch(err){
+      console.log(err);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+  }
+
+  async getUserFollowedArtists(limit = 20, after?: string): Promise<Array<ArtistObject>>{
+    try{
+      const response = await this.axios.get(
+        `me/following?type=artist&limit=${limit}`
+      );      return new Promise((resolve, reject) => {
+        resolve(response.data.artists.items);
+      });
+    }
+    catch(err){
       console.log(err);
       return new Promise((resolve, reject) => {
         reject(err);

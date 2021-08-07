@@ -1,6 +1,7 @@
 import "../styles/globals.scss";
 import { useEffect, useState } from "react";
-import { SpotifyProvider } from "../contexts/spotify";
+import { SongBarProvider } from "../contexts/songBar";
+import { UserProvider } from "../contexts/user";
 import { SpotifyAPI } from "../services/spotifyapi";
 import { initSpotifySDK } from "../services/spotifysdk";
 import Cookies from "js-cookie";
@@ -21,13 +22,15 @@ function MyApp({ Component, pageProps }) {
   if (authenticated) {
     return (
       <>
-        <SpotifyProvider>
-          <Component {...pageProps} />
-        </SpotifyProvider>
+        <SongBarProvider>
+          <UserProvider>
+            <Component {...pageProps} />
+          </UserProvider>
+        </SongBarProvider>
       </>
     );
   } else {
-    return <p>Redirecting to spotify Login page...</p>;
+    return <p>Redirecting to spotify authentication page...</p>;
   }
 }
 

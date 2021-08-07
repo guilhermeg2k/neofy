@@ -2,11 +2,12 @@ import { createContext, useState, useEffect, ReactNode } from "react";
 import { spotifySDK } from "../services/spotifysdk";
 import { AlbumObject, ArtistObject, PlaylistObject, SpotifyAPI, TimeRange, TrackObject } from "../services/spotifyapi";
 import Cookies from "js-cookie";
-interface SpotifyProviderProps {
+
+interface SongBarProviderProps {
   children: ReactNode;
 }
 
-interface SpotifyContextData {
+interface SongBarContextData {
   currentSong: string;
   currentArtist: string;
   albumImgURL: string;
@@ -29,17 +30,12 @@ interface SpotifyContextData {
   changeRepeatMode: () => void;
   setCurrentSongPosition: (value: number) => void;
   seekToPosition: (position: number) => void;
-  getCurrentUserPlayLists: (limit?: number, offset?: number) => Promise<Array<PlaylistObject>>;
-  getUserTopArtists: (timeRange?: TimeRange, limit?: number, offset?: number) => Promise<Array<ArtistObject>>;
-  getUserTopTracks: (timeRange?: TimeRange, limit?: number, offset?: number) => Promise<Array<TrackObject>>;
-  getUserSavedAlbums: (limit?: number, offset?: number) => Promise<Array<AlbumObject>>;
 }
 
-export const SpotifyContext = createContext({} as SpotifyContextData);
+export const SongBarContext = createContext({} as SongBarContextData);
 
-export function SpotifyProvider({ children }: SpotifyProviderProps) {
+export function SongBarProvider({ children }: SongBarProviderProps) {
   const spotifyAPI = new SpotifyAPI();
-
   const [currentSong, setCurrentSong] = useState("");
   const [currentArtist, setCurrentArtist] = useState("");
   const [albumImgURL, setAlbumImgUrl] = useState("");
@@ -89,24 +85,6 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     spotifyAPI.setRepeatMode(newRepeatMode);
   }
 
-  async function getCurrentUserPlayLists(limit = 20, offset = 0): Promise<Array<PlaylistObject>>{
-    return await spotifyAPI.getCurrentUserPlayLists(limit, offset);
-  }
-
-  async function getUserTopArtists(timeRange = TimeRange.short_term, limit = 10, offset = 0){
-    return await spotifyAPI.getUserTopArtists(timeRange, limit, offset);
-  }
-
-  async function getUserSavedAlbums(limit = 20, offset = 0): Promise<Array<AlbumObject>>{
-    return await spotifyAPI.getUserSavedAlbums(limit, offset);
-  }
-
-  async function getUserTopTracks(timeRange = TimeRange.short_term, limit = 10, offset = 0){
-    return await spotifyAPI.getUserTopTracks(timeRange, limit, offset);
-  }
-
-  
-
   useEffect(() => {
     spotifySDK.onReady(({ device_id }) => {
       console.log("Ready with Device ID", device_id);
@@ -138,7 +116,7 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
   }, []);
 
   return (
-    <SpotifyContext.Provider
+    <SongBarContext.Provider
       value={{
         currentSong,
         currentArtist,
@@ -159,13 +137,9 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
         setCurrentSongPosition,
         seekToPosition,
         currentContext,
-        getCurrentUserPlayLists,
-        getUserTopArtists,
-        getUserSavedAlbums,
-        getUserTopTracks
       }}
     >
       {children}
-    </SpotifyContext.Provider>
+    </SongBarContext.Provider>
   );
 }

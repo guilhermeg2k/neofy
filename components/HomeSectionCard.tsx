@@ -1,12 +1,12 @@
-import styles from "../styles/components/HomeCard.module.scss";
+import styles from "../styles/components/HomeSectionCard.module.scss";
 
-interface SongCardProps {
+interface HomeSectionCardProps {
   title: string;
   subtitle?: string;
   coverURL: string;
 }
 
-export default function HomeCard({ title, subtitle, coverURL }: SongCardProps) {
+export default function HomeSectionCard({ title, subtitle, coverURL }: HomeSectionCardProps) {
   return (
     <li className={styles.cardContainer}>
       <div>
