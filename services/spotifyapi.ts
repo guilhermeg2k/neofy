@@ -10,16 +10,16 @@ export interface UserCredencials {
   refreshToken: string;
 }
 
-export interface ExternalUrlObject{
+export interface ExternalUrlObject {
   spotify: string;
 }
 
-export interface FollowersObject{
+export interface FollowersObject {
   href: string;
   total: number;
 }
 
-export interface PublicUserObject{
+export interface PublicUserObject {
   display_name: string;
   external_url: ExternalUrlObject;
   followers: FollowersObject;
@@ -30,14 +30,14 @@ export interface PublicUserObject{
   uri: string;
 }
 
-export interface PlaylistTrackObject{
+export interface PlaylistTrackObject {
   added_at: Date;
   added_by: PublicUserObject;
   is_local: boolean;
   track: string;
 }
 
-export interface PlaylistObject{
+export interface PlaylistObject {
   collaborative: boolean;
   description: string;
   id: string;
@@ -53,7 +53,7 @@ export interface PlaylistObject{
   uri: string;
 }
 
-export interface ArtistObject{
+export interface ArtistObject {
   external_urls: ExternalUrlObject;
   followers: FollowersObject;
   genres: Array<string>;
@@ -66,13 +66,13 @@ export interface ArtistObject{
   uri: string;
 }
 
-export interface ImageObject{
+export interface ImageObject {
   height: number;
   url: string;
   width: string;
 }
 
-export interface TrackObject{
+export interface TrackObject {
   album: SimplifiedAlbumObject;
   artists: Array<ArtistObject>;
   available_markets: Array<string>;
@@ -95,7 +95,7 @@ export interface TrackObject{
   uri: string;
 }
 
-export interface SimplifiedTrackObject{
+export interface SimplifiedTrackObject {
   artists: Array<ArtistObject>;
   available_markets: Array<string>;
   disc_number: number;
@@ -115,11 +115,11 @@ export interface SimplifiedTrackObject{
   uri: string;
 }
 
-export interface TrackRestrictionObject{
+export interface TrackRestrictionObject {
   reaason: string;
 }
 
-export interface LinkedTrackObject{
+export interface LinkedTrackObject {
   external_urls: ExternalUrlObject;
   href: string;
   id: string;
@@ -127,7 +127,7 @@ export interface LinkedTrackObject{
   uri: string;
 }
 
-export interface SimplifiedAlbumObject{
+export interface SimplifiedAlbumObject {
   album_group: string;
   album_type: string;
   artists: Array<ArtistObject>;
@@ -146,7 +146,7 @@ export interface SimplifiedAlbumObject{
   uri: string;
 }
 
-export interface AlbumObject{
+export interface AlbumObject {
   album_type: string;
   artists: Array<ArtistObject>;
   available_markets: Array<string>;
@@ -170,22 +170,35 @@ export interface AlbumObject{
 }
 
 
-export interface AlbumRestrictionObject{
+export interface AlbumRestrictionObject {
   reason: string;
 }
-export interface ExternalIdObject{
+export interface ExternalIdObject {
   ean: string;
   isrc: string;
   upc: string;
 }
 
-export interface CopyrightObject{
+export interface CopyrightObject {
   text: string;
   type: string;
 }
-export interface SavedAlbumObject{
+export interface SavedAlbumObject {
   added_at: Date;
   album: AlbumObject;
+}
+
+export interface PlayHistoryObject {
+  context: ContextObject;
+  played_at: Date;
+  track: TrackObject;
+}
+
+export interface ContextObject {
+  external_urls: ExternalUrlObject
+  href: string;
+  type: string;
+  uri: string;
 }
 
 export enum TimeRange {
@@ -211,7 +224,8 @@ export class SpotifyAPI {
     "playlist-read-collaborative",
     "user-top-read",
     "user-library-read",
-    "user-follow-read"
+    "user-follow-read",
+    "user-read-recently-played"
   ];
 
   constructor() {
@@ -244,11 +258,14 @@ export class SpotifyAPI {
     console.log(response);
   }
 
-  async playURI(spotifyURI: string) {
+  async playURI(uri: string, contextUri: string) {
     const response = await this.axios.put(
       `me/player/play?device_id=${Cookies.get("device-id")}`,
       {
-        uris: [spotifyURI],
+        context_uri: contextUri,
+        offset: {
+          uri: uri
+        }
       }
     );
     console.log(response);
@@ -281,7 +298,7 @@ export class SpotifyAPI {
     }
   }
 
-  async getCurrentUserPlayLists(limit = 20, offset = 0): Promise<Array<PlaylistObject>>{
+  async getCurrentUserPlayLists(limit = 20, offset = 0): Promise<Array<PlaylistObject>> {
     try {
       const response = await this.axios.get(
         `/me/playlists?limit=${limit}&offset=${offset}`
@@ -297,7 +314,7 @@ export class SpotifyAPI {
     }
   }
 
-  async getUserTopArtists(timeRange: TimeRange, limit: number, offset: number): Promise<Array<ArtistObject>>{
+  async getUserTopArtists(timeRange: TimeRange, limit: number, offset: number): Promise<Array<ArtistObject>> {
     try {
       const response = await this.axios.get(
         `/me/top/artists?time_range=${TimeRange[timeRange]}&limit=${limit}&offset=${offset}`
@@ -313,7 +330,7 @@ export class SpotifyAPI {
     }
   }
 
-  async getUserTopTracks(timeRange: TimeRange, limit: number, offset: number): Promise<Array<TrackObject>>{
+  async getUserTopTracks(timeRange: TimeRange, limit: number, offset: number): Promise<Array<TrackObject>> {
     try {
       const response = await this.axios.get(
         `/me/top/tracks?time_range=${TimeRange[timeRange]}&limit=${limit}&offset=${offset}`
@@ -329,7 +346,7 @@ export class SpotifyAPI {
     }
   }
 
-  async getUserSavedAlbums(limit = 20, offset = 0): Promise<Array<AlbumObject>>{
+  async getUserSavedAlbums(limit = 20, offset = 0): Promise<Array<AlbumObject>> {
     try {
       const response = await this.axios.get(
         `me/albums?limit=${limit}&offset=${offset}`
@@ -345,8 +362,8 @@ export class SpotifyAPI {
     }
   }
 
-  async getUserSavedTracks(limit = 20, offset = 0 ): Promise<Array<TrackObject>>{
-    try{
+  async getUserSavedTracks(limit = 20, offset = 0): Promise<Array<TrackObject>> {
+    try {
       const response = await this.axios.get(
         `me/tracks?limit=${limit}&offset=${offset}`
       );
@@ -354,7 +371,7 @@ export class SpotifyAPI {
         resolve(response.data.items);
       });
     }
-    catch(err){
+    catch (err) {
       console.log(err);
       return new Promise((resolve, reject) => {
         reject(err);
@@ -362,15 +379,49 @@ export class SpotifyAPI {
     }
   }
 
-  async getUserFollowedArtists(limit = 20, after?: string): Promise<Array<ArtistObject>>{
-    try{
+  async getUserFollowedArtists(limit = 20, after?: string): Promise<Array<ArtistObject>> {
+    try {
       const response = await this.axios.get(
         `me/following?type=artist&limit=${limit}`
-      );      return new Promise((resolve, reject) => {
+      ); return new Promise((resolve, reject) => {
         resolve(response.data.artists.items);
       });
     }
-    catch(err){
+    catch (err) {
+      console.log(err);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+  }
+
+  async getUserRecentlyPlayedTracks(limit = 20): Promise<Array<PlayHistoryObject>> {
+    try {
+      const response = await this.axios.get(
+        `me/player/recently-played?limit=${limit}`
+      ); 
+      return new Promise((resolve, reject) => {
+        resolve(response.data.items);
+      });
+    }
+    catch (err) {
+      console.log(err);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+  }
+
+  async getPlayList(id: string): Promise<PlaylistObject> {
+    try {
+      const response = await this.axios.get(
+        `playlists/${id}`
+      ); return new Promise((resolve, reject) => {
+        resolve(response.data);
+      });
+    }
+
+    catch (err) {
       console.log(err);
       return new Promise((resolve, reject) => {
         reject(err);

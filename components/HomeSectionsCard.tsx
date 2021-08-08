@@ -1,4 +1,4 @@
-import styles from "../styles/components/HomeSectionCard.module.scss";
+import styles from "../styles/components/HomeSectionsCard.module.scss";
 
 interface HomeSectionCardProps {
   title: string;

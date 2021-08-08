@@ -73,3 +73,18 @@ textarea:focus {
 .hidden{
   display: none;
 }
+
+.button{
+  transition: all 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: vars.$primary;
+  font-weight: 800;
+  padding: 10px 20px;
+  border-radius: 2px;
+  cursor: pointer;
+  &:hover{
+    background-color: vars.$dark-4;
+  }
+}

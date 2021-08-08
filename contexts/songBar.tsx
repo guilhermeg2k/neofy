@@ -30,6 +30,7 @@ interface SongBarContextData {
   changeRepeatMode: () => void;
   setCurrentSongPosition: (value: number) => void;
   seekToPosition: (position: number) => void;
+  playURI: (uri: string, contextUri: string) => void;
 }
 
 export const SongBarContext = createContext({} as SongBarContextData);
@@ -69,6 +70,10 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
 
   function toggleShuffle() {
     spotifyAPI.setShuffle(!shuffle);
+  }
+
+  function playURI(uri: string, contextUri: string){
+    spotifyAPI.playURI(uri, contextUri);
   }
 
   function seekToPosition(position: number) {
@@ -137,6 +142,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
         setCurrentSongPosition,
         seekToPosition,
         currentContext,
+        playURI
       }}
     >
       {children}

@@ -1,0 +1,33 @@
+@use "../vars";
+
+.HomeMainCardContainer{
+  height: 450px;
+  .cardBackGround{
+    height: 450px;
+    img{
+      height: 450px;
+      border-radius: 2px;
+    }
+  }
+  .cardInfos{
+    position: relative;
+    top: -92px;
+    background-color: #2424247a;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1{
+      text-transform: uppercase;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: vars.$primary;
+    }
+    h3{
+      text-transform: uppercase;
+      font-weight: 800;
+      font-size: 1.4rem;
+    }
+  }
+}

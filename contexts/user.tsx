@@ -1,17 +1,18 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { AlbumObject, ArtistObject, PlaylistObject, SpotifyAPI, TimeRange, TrackObject } from "../services/spotifyapi";
+import { AlbumObject, ArtistObject, PlayHistoryObject, PlaylistObject, SpotifyAPI, TimeRange, TrackObject } from "../services/spotifyapi";
 
 interface UserProviderProps {
   children: ReactNode;
 }
 
-interface UserContextData{
+interface UserContextData {
   playLists: Array<PlaylistObject>;
   followedArtists: Array<ArtistObject>;
   savedTracks: Array<TrackObject>;
   savedAlbums: Array<AlbumObject>;
   getUserTopArtists: (timeRange?: TimeRange, limit?: number, offset?: number) => Promise<Array<ArtistObject>>;
   getUserTopTracks: (timeRange?: TimeRange, limit?: number, offset?: number) => Promise<Array<TrackObject>>;
+  getUserRecentlyPlayedTracks: (limit?: number) => Promise<Array<PlayHistoryObject>>;
 }
 
 export const UserContext = createContext({} as UserContextData);
@@ -34,13 +35,18 @@ export function UserProvider({ children }: UserProviderProps) {
     fetchAPI();
   }, []);
 
-  async function getUserTopArtists(timeRange = TimeRange.short_term, limit = 10, offset = 0){
+  async function getUserTopArtists(timeRange = TimeRange.short_term, limit = 10, offset = 0) {
     return await spotifyAPI.getUserTopArtists(timeRange, limit, offset);
   }
 
-  async function getUserTopTracks(timeRange = TimeRange.short_term, limit = 10, offset = 0){
+  async function getUserTopTracks(timeRange = TimeRange.short_term, limit = 10, offset = 0) {
     return await spotifyAPI.getUserTopTracks(timeRange, limit, offset);
   }
+
+  async function getUserRecentlyPlayedTracks(limit = 10){
+    return await spotifyAPI.getUserRecentlyPlayedTracks(limit);
+  }
+
 
   return (
     <UserContext.Provider
@@ -50,10 +56,11 @@ export function UserProvider({ children }: UserProviderProps) {
         followedArtists,
         savedTracks,
         getUserTopArtists,
-        getUserTopTracks
+        getUserTopTracks,
+        getUserRecentlyPlayedTracks
       }}
     >
-        {children}
+      {children}
     </UserContext.Provider>
   )
 }
