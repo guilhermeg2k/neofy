@@ -12,9 +12,8 @@ import {
   PauseCircleOutline,
 } from "@material-ui/icons";
 import { SongBarContext } from "../contexts/songBar";
-export default function SongBar() {
-  
 
+export default function SongBar() {
   const {
     currentSong,
     currentArtist,

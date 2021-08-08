@@ -1,0 +1,50 @@
+@use "../vars";
+
+.suggestionCardContainer {
+  display: flex;
+  align-items: center;
+
+  padding: 7px 25px 7px 7px;
+  border-radius: 2px;
+
+  background-color: vars.$dark-2;
+
+  div:first-child {
+    height: 71px;
+    img {
+      width: 79px;
+      height: 71px;
+    }
+    margin-right: 7px;
+  }
+  div:last-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    div:first-child {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex-grow: 1;
+      h1 {
+        color: vars.$primary;
+        font-size: 20px;
+      }
+      h3 {
+        font-size: 15px;
+      }
+    }
+    svg {
+      transform: scale(1.6);
+      :hover {
+        cursor: pointer;
+        color: vars.$primary;
+      }
+    }
+  }
+  &:hover {
+    background-color: vars.$dark-4;
+    cursor: pointer;
+  }
+}

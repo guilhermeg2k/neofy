@@ -1,12 +1,13 @@
 import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../contexts/user';
+import { PlayHistoryObject } from '../services/spotifyapi';
+import { SpotifyAPI } from "../services/spotifyapi";
 import styles from "../styles/pages/Home.module.scss";
 import SongBar from "../components/SongBar";
 import LeftBar from "../components/LeftBar";
 import HomeSectionCard from "../components/HomeSectionsCard";
 import HomeMainCard from "../components/HomeMainCard";
-import { UserContext } from '../contexts/user';
-import { PlayHistoryObject } from '../services/spotifyapi';
-import { SpotifyAPI, TrackObject, PlaylistObject } from "../services/spotifyapi";
+import SuggestionCard from '../components/SuggestionCard';
 
 export default function Home() {
   const spotifyAPI = new SpotifyAPI();
@@ -22,7 +23,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchAPI() {
       console.log("CALL ME BITCH");
-      setRecentylePlayedTracks(await getUserRecentlyPlayedTracks());
+      setRecentylePlayedTracks(await getUserRecentlyPlayedTracks(15));
 
     }
     fetchAPI();
@@ -66,7 +67,15 @@ export default function Home() {
               />
               : <></>
             }
-
+            <div className={styles.suggestionsContainer}>
+              {
+                recentlyPlayedTracks.slice(2,7).map(item => <SuggestionCard 
+                  name = {item.track.name}
+                  subtitle = {item.track.artists[0].name}
+                  imageURL={item.track.album.images[0].url}
+                  />)
+              }
+            </div>
           </section>
           <section className={styles.homeSection}>
             <h1>Your Playlists</h1>

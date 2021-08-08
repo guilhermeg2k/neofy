@@ -1,7 +1,5 @@
 import styles from "../styles/components/HomeMainCard.module.scss";
-import {useContext} from "react";
-
-import { PlayHistoryObject } from "../services/spotifyapi";
+import { useContext } from "react";
 import { PlayCircleFilled } from "@material-ui/icons";
 import { SongBarContext } from '../contexts/songBar';
 
@@ -18,15 +16,15 @@ export default function HomeSectionCard({ name, subtitle, uri, backgroundURL, co
     playURI
   } = useContext(SongBarContext);
 
-  function handlePlay(){
+  function handlePlay() {
     playURI(uri, contextUri);
   }
 
   return (
-    <div className={styles.HomeMainCardContainer}>
-      <div className={styles.cardBackGround}>
-        <img src={backgroundURL} alt="card background"/>
-      </div>
+    <div
+      className={styles.HomeMainCardContainer}
+      style={{ backgroundImage: `url(${backgroundURL})` }}
+    >
       <div className={styles.cardInfos}>
         <div>
           <h1>{name}</h1>
@@ -34,7 +32,7 @@ export default function HomeSectionCard({ name, subtitle, uri, backgroundURL, co
         </div>
         <div className="button" onClick={handlePlay}>
           <span>PLAY</span>
-          <PlayCircleFilled/>
+          <PlayCircleFilled />
         </div>
       </div>
     </div>

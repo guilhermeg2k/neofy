@@ -15,14 +15,20 @@
         margin: 10px 0;
     }
     ul{
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        display: flex;
         justify-content: space-between;
     }
 }
 
 .homeMainContainer{
     display: flex;
+    .suggestionsContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-left: 40px;
+        flex-grow: 1;
+    }
 }
 
 @media (min-width: vars.$medium) {

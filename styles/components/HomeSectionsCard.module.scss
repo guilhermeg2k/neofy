@@ -26,8 +26,7 @@
             border-radius: 2px;
         }
     }
-}
-
-.cardContainer:hover{
-    background-color: vars.$dark-4;
+    &:hover{
+        background-color: vars.$dark-4;
+    }
 }
