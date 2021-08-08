@@ -15,23 +15,23 @@ export default function Home() {
   const [selectedItem, setSelectedItem] = useState({});
 
   const {
-    playLists,
+    playlists: playLists,
     followedArtists,
+    savedAlbums,
+    suggestions,
     getUserRecentlyPlayedTracks
   } = useContext(UserContext);
 
-  useEffect(() => {
+  console.log(suggestions);
+  /*useEffect(() => {
     async function fetchAPI() {
-      console.log("CALL ME BITCH");
       setRecentylePlayedTracks(await getUserRecentlyPlayedTracks(15));
-
     }
     fetchAPI();
   }, []);
 
   useEffect(() => {
     async function fetchAPI() {
-      console.log(recentlyPlayedTracks);
       if (recentlyPlayedTracks.length > 0 && recentlyPlayedTracks[0].context) {
         const playListID = recentlyPlayedTracks[0].context.uri.split(":")[2];
         setSelectedItem(
@@ -46,7 +46,7 @@ export default function Home() {
 
     fetchAPI();
   }, [recentlyPlayedTracks]);
-  console.log(selectedItem);
+  console.log(savedAlbums);*/
   return (
     <>
       <SongBar />
@@ -55,25 +55,20 @@ export default function Home() {
       <main className={styles.homeContainer}>
         <div className={styles.homeWrapper}>
           <section className={styles.homeMainContainer}>
-            { selectedItem.track ?
+            {suggestions?.length > 0 ?
               <HomeMainCard
-                name={selectedItem.track.name}
-                subtitle={
-                  selectedItem.playList.type == "playlist" ? `On playlist ${selectedItem.playList.name}` : "no"
-                }
-                backgroundURL={selectedItem.track.album.images[0].url}
-                uri={selectedItem.track.uri}
-                contextUri={selectedItem.context.uri}
+                suggestion={suggestions[0]}
               />
               : <></>
             }
             <div className={styles.suggestionsContainer}>
               {
-                recentlyPlayedTracks.slice(2,7).map(item => <SuggestionCard 
-                  name = {item.track.name}
-                  subtitle = {item.track.artists[0].name}
-                  imageURL={item.track.album.images[0].url}
-                  />)
+                suggestions?.length > 0 ?
+                  suggestions.slice(1).map(suggestion =>
+                    <SuggestionCard
+                      suggestion={suggestion}
+                    />)
+                  : <></>
               }
             </div>
           </section>

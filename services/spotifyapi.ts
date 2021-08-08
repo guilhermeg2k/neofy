@@ -258,17 +258,49 @@ export class SpotifyAPI {
     console.log(response);
   }
 
-  async playURI(uri: string, contextUri: string) {
-    const response = await this.axios.put(
-      `me/player/play?device_id=${Cookies.get("device-id")}`,
-      {
-        context_uri: contextUri,
-        offset: {
-          uri: uri
+  async playURI(uri: string) {
+    try {
+      await this.axios.put(
+        `me/player/play?device_id=${Cookies.get("device-id")}`,
+        {
+          uris: [uri]
         }
-      }
-    );
-    console.log(response);
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async playContext(contextUri: string, offset: number) {
+    try {
+      await this.axios.put(
+        `me/player/play?device_id=${Cookies.get("device-id")}`,
+        {
+          context_uri: contextUri,
+          offset: {
+            position: offset,
+          }
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async playTrackInAContext(uri: string, ContextUri: string) {
+    try {
+      await this.axios.put(
+        `me/player/play?device_id=${Cookies.get("device-id")}`,
+        {
+          context_uri: ContextUri,
+          offset: {
+            uri: uri
+          }
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async setShuffle(value: boolean) {
@@ -330,7 +362,7 @@ export class SpotifyAPI {
     }
   }
 
-  async getUserTopTracks(timeRange: TimeRange, limit: number, offset: number): Promise<Array<TrackObject>> {
+  async getUserTopTracks(timeRange: TimeRange, limit = 10, offset = 0): Promise<Array<TrackObject>> {
     try {
       const response = await this.axios.get(
         `/me/top/tracks?time_range=${TimeRange[timeRange]}&limit=${limit}&offset=${offset}`
@@ -399,7 +431,7 @@ export class SpotifyAPI {
     try {
       const response = await this.axios.get(
         `me/player/recently-played?limit=${limit}`
-      ); 
+      );
       return new Promise((resolve, reject) => {
         resolve(response.data.items);
       });
