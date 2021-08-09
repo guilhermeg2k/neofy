@@ -84,7 +84,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
 
   function playContext(contextUri: string, offset: number){
     spotifyAPI.playContext(contextUri, offset);
-  }
+  } 
 
   function seekToPosition(position: number) {
     spotifySDK.seekToPosition(position);

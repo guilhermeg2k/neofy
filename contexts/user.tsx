@@ -35,14 +35,15 @@ export function UserProvider({ children }: UserProviderProps) {
   const [suggestions, setSuggestions] = useState(Array<Suggestion>());
 
   useEffect(() => {
+    
     async function fetchAPI() {
       setPlayLists(await spotifyAPI.getCurrentUserPlayLists(20));
       setFollowedArtists(await spotifyAPI.getUserFollowedArtists());
       setSavedAlmbums(await spotifyAPI.getUserSavedAlbums(20));
       setSavedTracks(await spotifyAPI.getUserSavedTracks(20));
       setTop20Tracks(await spotifyAPI.getUserTopTracks(TimeRange.short_term, 20));
-
     }
+    
     fetchAPI();
   }, []);
 
@@ -109,17 +110,14 @@ export function UserProvider({ children }: UserProviderProps) {
     if (playlists.length > 0 && savedAlbums.length > 0 && savedTracks.length > 0) {
       const suggestions = Array<Suggestion>();
       const optionsHistoric = Array<number>();
-      const selectionsHistoric = Array<Array<number>>();
-
-      for (let i = 0; i < 3; i++) {
-        selectionsHistoric.push([]);
-      }
+      const selectionsHistoric = Array<Array<number>>(3);
+      selectionsHistoric.fill([]);
 
       for (let i = 0; i < max; i++) {
         const option = generateOption(optionsHistoric, selectionsHistoric);
         const selection = generateSelection(option, selectionsHistoric);
-
         optionsHistoric.push(option);
+
         switch (option) {
           case 0:
             selectionsHistoric[0].push(selection);

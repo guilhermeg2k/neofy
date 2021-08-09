@@ -12,9 +12,13 @@ export default function HomeSectionCard({ suggestion }: HomeMainCardProps) {
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [imageURL, setImageURL] = useState("");
+  const [uri, setUri] = useState("");
+  const [contextUri, setContextUri] = useState("");
+  const [isToPlayFromBeginning, setIsToPlayFromBeginning] = useState(false);
 
   const {
-    playUri: playURI
+    playUri,
+    playContext
   } = useContext(SongBarContext);
 
   useEffect(() => {
@@ -23,25 +27,34 @@ export default function HomeSectionCard({ suggestion }: HomeMainCardProps) {
         setTitle(suggestion.item.album.name);
         setSubtitle(suggestion.item.album.artists[0].name);
         setImageURL(suggestion.item.album.images[0].url);
+        setContextUri(suggestion.item.album.uri);
+        setIsToPlayFromBeginning(true);
         break;
       case "track":
         setTitle(suggestion.item.track.name);
         setSubtitle(suggestion.item.track.artists[0].name);
         setImageURL(suggestion.item.track.album.images[0].url);
+        setUri(suggestion.item.track.uri);
         break;
       case "playlist":
         setTitle(suggestion.item.name);
         setSubtitle("Playlist");
         setImageURL(suggestion.item.images[0].url);
+        setContextUri(suggestion.item.uri);
+        setIsToPlayFromBeginning(true);
         break;
     }
   }, []);
 
   function handlePlay() {
-    //playURI(uri, contextUri);
+    if (uri !== ""){
+      playUri(uri);
+    } else {
+      playContext(contextUri, 0);
+    }
   }
-
-  return (
+  console.log("kkkkkkkkkk");
+  return ( 
     <div
       className={styles.HomeMainCardContainer}
       style={{ backgroundImage: `url(${imageURL})` }}

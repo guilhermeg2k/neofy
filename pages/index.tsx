@@ -23,30 +23,7 @@ export default function Home() {
   } = useContext(UserContext);
 
   console.log(suggestions);
-  /*useEffect(() => {
-    async function fetchAPI() {
-      setRecentylePlayedTracks(await getUserRecentlyPlayedTracks(15));
-    }
-    fetchAPI();
-  }, []);
-
-  useEffect(() => {
-    async function fetchAPI() {
-      if (recentlyPlayedTracks.length > 0 && recentlyPlayedTracks[0].context) {
-        const playListID = recentlyPlayedTracks[0].context.uri.split(":")[2];
-        setSelectedItem(
-          {
-            track: recentlyPlayedTracks[0].track,
-            context: recentlyPlayedTracks[0].context,
-            playList: await spotifyAPI.getPlayList(playListID)
-          }
-        )
-      }
-    }
-
-    fetchAPI();
-  }, [recentlyPlayedTracks]);
-  console.log(savedAlbums);*/
+  
   return (
     <>
       <SongBar />
