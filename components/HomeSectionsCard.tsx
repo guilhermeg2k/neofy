@@ -1,9 +1,9 @@
 import styles from "../styles/components/HomeSectionsCard.module.scss";
-import { AlbumObject, ArtistObject, PlayHistoryObject, PlaylistObject, SpotifyAPI, TrackObject } from "../services/spotifyapi";
+import { ArtistObject, PlayHistoryObject, PlaylistObject, SavedAlbumObject, spotifyAPI, SavedTrackObject } from "../services/spotifyapi";
 import { useEffect, useState } from "react";
 
 interface SectionData {
-  item: TrackObject | AlbumObject | PlaylistObject | PlayHistoryObject | ArtistObject;
+  item: | SavedTrackObject | SavedAlbumObject | PlaylistObject | PlayHistoryObject | ArtistObject;
   type: "playlist" | "album" | "track" | "artist" | "recentlyPlayedTrack";
 }
 
@@ -19,7 +19,7 @@ export default function HomeSectionCard({ sectionData }: HomeSectionCardProps) {
   const [contextUri, setContextUri] = useState("");
   const [isToPlayFromBeginning, setIsToPlayFromBeginning] = useState(false);
 
-  const spotifyAPI = new SpotifyAPI();
+  console.log(sectionData);
 
   useEffect(() => {
     switch (sectionData.type) {
@@ -49,7 +49,7 @@ export default function HomeSectionCard({ sectionData }: HomeSectionCardProps) {
         setContextUri(sectionData.item.uri);
         setIsToPlayFromBeginning(true);
     }
-  }, []);
+  }, [sectionData]);
 
   function handlePlay() {
     if (uri !== "") {
@@ -66,7 +66,7 @@ export default function HomeSectionCard({ sectionData }: HomeSectionCardProps) {
   return (
     <li className={styles.cardContainer} onClick={handlePlay}>
       <div>
-        <h3>{title}</h3>
+        <h3 title={title}>{title}</h3>
         {subtitle ? <h4>{subtitle}</h4> : <></>}
       </div>
       <div>

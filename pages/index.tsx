@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../contexts/user';
-import { PlayHistoryObject } from '../services/spotifyapi';
-import { SpotifyAPI } from "../services/spotifyapi";
 import styles from "../styles/pages/Home.module.scss";
 import SongBar from "../components/SongBar";
 import LeftBar from "../components/LeftBar";
 import HomeSectionCard from "../components/HomeSectionsCard";
 import HomeMainCard from "../components/HomeMainCard";
 import SuggestionCard from '../components/SuggestionCard';
+import { ChevronLeft, ChevronRight } from '@material-ui/icons';
+import { ArtistObject, PlaylistObject } from '../services/spotifyapi';
 
 export default function Home() {
   const {
@@ -15,6 +15,46 @@ export default function Home() {
     followedArtists,
     suggestions,
   } = useContext(UserContext);
+
+  const [currentPlaylists, setCurrentPlaylist] = useState(Array<PlaylistObject>());
+  const [currentArtists, setCurrentArtists] = useState(Array<ArtistObject>());
+  const [currentSectionPage, setCurrentSectionPage] = useState([0, 0]);
+  const numberOfCardsPerSection = 5;
+
+  function handleNextOnSection<Type>(array: Array<Type>, setFunction: (array: Array<Type>) => void, sectionNumber: number) {
+    const newCurrentSectionPage = [...currentSectionPage];
+    newCurrentSectionPage[sectionNumber]++;
+    const newList = array.slice(numberOfCardsPerSection * newCurrentSectionPage[sectionNumber], numberOfCardsPerSection * newCurrentSectionPage[sectionNumber] + numberOfCardsPerSection);
+
+    if (newList.length > 0) {
+      if (newList.length < numberOfCardsPerSection){
+        for(let i = 0; i <=  numberOfCardsPerSection - newList.length + 1; i++){
+          newList.push(array[i]);
+        }
+      }
+      setCurrentSectionPage(newCurrentSectionPage);
+      setFunction(newList);
+    }
+  }
+
+  function handleBackOnSection<Type>(array: Array<Type>, setFunction: (array: Array<Type>) => void, sectionNumber: number) {
+    const newCurrentSectionPage = [...currentSectionPage];
+    newCurrentSectionPage[sectionNumber]--;
+    const newList = array.slice(numberOfCardsPerSection * newCurrentSectionPage[sectionNumber], numberOfCardsPerSection * newCurrentSectionPage[sectionNumber] + numberOfCardsPerSection);
+
+    if (newList.length > 0) {
+      setCurrentSectionPage(newCurrentSectionPage);
+      setFunction(newList);
+    }
+  }
+
+  useEffect(() => {
+    setCurrentPlaylist(playlists.slice(0, numberOfCardsPerSection));
+    setCurrentArtists(followedArtists.slice(0, numberOfCardsPerSection));
+    console.log("CALATE EPELEO");
+  }, [playlists, followedArtists]);
+
+  console.log(suggestions);
 
   return (
     <>
@@ -42,12 +82,18 @@ export default function Home() {
             </div>
           </section>
           <section className={styles.homeSection}>
-            <h1>Your Playlists</h1>
+            <div className={styles.sectionHeader}>
+              <h1>Your Playlists</h1>
+              <div>
+                <ChevronLeft onClick={() => handleBackOnSection(playlists, setCurrentPlaylist, 0)} />
+                <ChevronRight onClick={() => handleNextOnSection(playlists, setCurrentPlaylist, 0)} />
+              </div>
+            </div>
             <ul>
               {
-                playlists.slice(0, 5).map(playlist =>
+                currentPlaylists.map(playlist =>
                   <HomeSectionCard
-                    sectionData = {{
+                    sectionData={{
                       item: playlist,
                       type: "playlist"
                     }}
@@ -56,12 +102,18 @@ export default function Home() {
             </ul>
           </section>
           <section className={styles.homeSection}>
-            <h1>Followed Artists</h1>
+            <div className={styles.sectionHeader}>
+              <h1>Followed Artists</h1>
+              <div>
+                <ChevronLeft onClick={() => handleBackOnSection(followedArtists, setCurrentArtists, 1)} />
+                <ChevronRight onClick={() => handleNextOnSection(followedArtists, setCurrentArtists, 1)} />
+              </div>
+            </div>
             <ul>
-            {
-                followedArtists.slice(0, 5).map(artist =>
+              {
+                currentArtists.map(artist =>
                   <HomeSectionCard
-                    sectionData = {{
+                    sectionData={{
                       item: artist,
                       type: "artist"
                     }}
@@ -71,6 +123,7 @@ export default function Home() {
           </section>
         </div>
       </main>
+      <footer>FOOTEEEEEEEEEER</footer>
     </>
   );
 }

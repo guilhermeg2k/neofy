@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { spotifySDK } from "../services/spotifysdk";
-import { SpotifyAPI } from "../services/spotifyapi";
+import { spotifyAPI } from "../services/spotifyapi";
 import Cookies from "js-cookie";
 
 interface SongBarProviderProps {
@@ -35,7 +35,6 @@ interface SongBarContextData {
 export const SongBarContext = createContext({} as SongBarContextData);
 
 export function SongBarProvider({ children }: SongBarProviderProps) {
-  const spotifyAPI = new SpotifyAPI();
   const [currentSong, setCurrentSong] = useState("");
   const [currentArtist, setCurrentArtist] = useState("");
   const [albumImgURL, setAlbumImgUrl] = useState("");
@@ -89,7 +88,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
     spotifySDK.onReady(({ device_id }) => {
       console.log("Ready with Device ID", device_id);
       Cookies.set("device-id", device_id);
-      spotifyAPI.playCurrentPlayBack();
+      //spotifyAPI.playCurrentPlayBack();
     });
 
     spotifySDK.onStateChange((state) => {

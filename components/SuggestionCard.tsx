@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { PlayCircleFilled } from "@material-ui/icons";
 import { Suggestion } from "../contexts/user";
 import { SongBarContext } from "../contexts/songBar";
-import { SpotifyAPI } from "../services/spotifyapi";
+import { spotifyAPI } from "../services/spotifyapi";
 
 interface SuggestionCardProps {
   suggestion: Suggestion;
@@ -16,8 +16,6 @@ export default function SuggestionCard({ suggestion }: SuggestionCardProps) {
   const [uri, setUri] = useState("");
   const [contextUri, setContextUri] = useState("");
   const [isToPlayFromBeginning, setIsToPlayFromBeginning] = useState(false);
-  
-  const spotifyAPI = new SpotifyAPI();
 
   useEffect(() => {
     switch(suggestion.type){

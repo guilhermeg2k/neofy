@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { AlbumObject, ArtistObject, PlayHistoryObject, PlaylistObject, SpotifyAPI, TimeRange, TrackObject } from "../services/spotifyapi";
+import { AlbumObject, ArtistObject, PlayHistoryObject, PlaylistObject, spotifyAPI, TimeRange, TrackObject } from "../services/spotifyapi";
 
 interface UserProviderProps {
   children: ReactNode;
@@ -25,8 +25,6 @@ interface UserContextData {
 export const UserContext = createContext({} as UserContextData);
 
 export function UserProvider({ children }: UserProviderProps) {
-  const spotifyAPI = new SpotifyAPI();
-
   const [playlists, setPlayLists] = useState(Array<PlaylistObject>());
   const [followedArtists, setFollowedArtists] = useState(Array<ArtistObject>());
   const [savedTracks, setSavedTracks] = useState(Array<TrackObject>());

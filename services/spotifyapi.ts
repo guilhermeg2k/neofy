@@ -201,6 +201,16 @@ export interface ContextObject {
   uri: string;
 }
 
+export interface SavedAlbumObject{
+  added_at: Date;
+  album: AlbumObject;
+}
+
+export interface SavedTrackObject{
+  added_at: Date;
+  track: TrackObject;
+}
+
 export enum TimeRange {
   long_term,
   medium_term,
@@ -525,3 +535,5 @@ export class SpotifyAPI {
     window.open(requestURL, "_self");
   }
 }
+
+export const spotifyAPI = new SpotifyAPI();

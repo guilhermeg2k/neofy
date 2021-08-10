@@ -1,32 +1,37 @@
 @use "../vars";
 
-.cardContainer{
-    list-style: none;
-    width: 231px;
-    height: 284px;
-    border-radius: 2px;
-    background-color: vars.$dark-2;
-    padding: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    div:first-child{
-        margin-bottom: 16px;
-        h3{
-            font-size: 1rem;
-            color: vars.$primary;
-        }
-        h4{
-            font-size: 0.8rem;
-        }
+.cardContainer {
+  list-style: none;
+  width: 231px;
+  height: 284px;
+  border-radius: 2px;
+  background-color: vars.$dark-2;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  div:first-child {
+    margin-bottom: 16px;
+    h3 {
+      font-size: 1rem;
+      color: vars.$primary;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    div:last-child{
-        width: 100%;
-        img{
-            width: 100%;
-            border-radius: 2px;
-        }
+    h4 {
+      font-size: 0.8rem;
     }
-    &:hover{
-        background-color: vars.$dark-4;
+  }
+
+  div:last-child {
+    width: 100%;
+    img {
+      width: 100%;
+      border-radius: 2px;
     }
+  }
+  &:hover {
+    background-color: vars.$dark-4;
+  }
 }
