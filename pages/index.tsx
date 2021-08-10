@@ -10,20 +10,12 @@ import HomeMainCard from "../components/HomeMainCard";
 import SuggestionCard from '../components/SuggestionCard';
 
 export default function Home() {
-  const spotifyAPI = new SpotifyAPI();
-  const [recentlyPlayedTracks, setRecentylePlayedTracks] = useState(Array<PlayHistoryObject>());
-  const [selectedItem, setSelectedItem] = useState({});
-
   const {
-    playlists: playLists,
+    playlists,
     followedArtists,
-    savedAlbums,
     suggestions,
-    getUserRecentlyPlayedTracks
   } = useContext(UserContext);
 
-  console.log(suggestions);
-  
   return (
     <>
       <SongBar />
@@ -53,11 +45,12 @@ export default function Home() {
             <h1>Your Playlists</h1>
             <ul>
               {
-                playLists.slice(0, 5).map(playList =>
+                playlists.slice(0, 5).map(playlist =>
                   <HomeSectionCard
-                    title={playList.name}
-                    subtitle={playList.owner.display_name}
-                    coverURL={playList.images[0].url}
+                    sectionData = {{
+                      item: playlist,
+                      type: "playlist"
+                    }}
                   />)
               }
             </ul>
@@ -65,12 +58,13 @@ export default function Home() {
           <section className={styles.homeSection}>
             <h1>Followed Artists</h1>
             <ul>
-              {
+            {
                 followedArtists.slice(0, 5).map(artist =>
                   <HomeSectionCard
-                    title={artist.name}
-                    subtitle=""
-                    coverURL={artist.images[0].url}
+                    sectionData = {{
+                      item: artist,
+                      type: "artist"
+                    }}
                   />)
               }
             </ul>

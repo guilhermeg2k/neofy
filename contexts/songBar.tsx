@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { spotifySDK } from "../services/spotifysdk";
-import { AlbumObject, ArtistObject, PlaylistObject, SpotifyAPI, TimeRange, TrackObject } from "../services/spotifyapi";
+import { SpotifyAPI } from "../services/spotifyapi";
 import Cookies from "js-cookie";
 
 interface SongBarProviderProps {
@@ -30,9 +30,6 @@ interface SongBarContextData {
   changeRepeatMode: () => void;
   setCurrentSongPosition: (value: number) => void;
   seekToPosition: (position: number) => void;
-  playUri: (uri: string) => void;
-  playContext: (contextUri: string, offset: number) => void;
-  playTrackInAContext: (uri: string, ContextUri: string) => void;
 }
 
 export const SongBarContext = createContext({} as SongBarContextData);
@@ -73,19 +70,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
   function toggleShuffle() {
     spotifyAPI.setShuffle(!shuffle);
   }
-
-  function playUri(uri: string){
-    spotifyAPI.playURI(uri);
-  }
-
-  function playTrackInAContext(uri: string, ContextUri: string){
-    spotifyAPI.playTrackInAContext(uri, ContextUri);
-  }
-
-  function playContext(contextUri: string, offset: number){
-    spotifyAPI.playContext(contextUri, offset);
-  } 
-
+ 
   function seekToPosition(position: number) {
     spotifySDK.seekToPosition(position);
   }
@@ -151,10 +136,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
         currentSongPosition,
         setCurrentSongPosition,
         seekToPosition,
-        currentContext,
-        playUri,
-        playContext,
-        playTrackInAContext
+        currentContext
       }}
     >
       {children}

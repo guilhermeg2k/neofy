@@ -208,7 +208,6 @@ export enum TimeRange {
 }
 
 
-
 export class SpotifyAPI {
   private axios: AxiosInstance;
   static clientID = "eca09370790043d6a575e301b2da83ca";
@@ -258,7 +257,7 @@ export class SpotifyAPI {
     console.log(response);
   }
 
-  async playURI(uri: string) {
+  async playUri(uri: string) {
     try {
       await this.axios.put(
         `me/player/play?device_id=${Cookies.get("device-id")}`,
@@ -271,16 +270,25 @@ export class SpotifyAPI {
     }
   }
 
-  async playContext(contextUri: string, offset: number) {
+  async playContext(contextUri: string, offset?: number) {
+    let body = {};
+    if (offset) {
+      body = {
+        context_uri: contextUri,
+        offset: {
+          position: offset,
+        }
+      };
+    } else {
+      body = {
+        context_uri: contextUri,
+      }
+    }
+
     try {
       await this.axios.put(
         `me/player/play?device_id=${Cookies.get("device-id")}`,
-        {
-          context_uri: contextUri,
-          offset: {
-            position: offset,
-          }
-        }
+        body
       );
     } catch (err) {
       console.log(err);

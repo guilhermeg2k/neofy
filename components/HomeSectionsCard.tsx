@@ -1,20 +1,76 @@
 import styles from "../styles/components/HomeSectionsCard.module.scss";
+import { AlbumObject, ArtistObject, PlayHistoryObject, PlaylistObject, SpotifyAPI, TrackObject } from "../services/spotifyapi";
+import { useEffect, useState } from "react";
 
-interface HomeSectionCardProps {
-  title: string;
-  subtitle?: string;
-  coverURL: string;
+interface SectionData {
+  item: TrackObject | AlbumObject | PlaylistObject | PlayHistoryObject | ArtistObject;
+  type: "playlist" | "album" | "track" | "artist" | "recentlyPlayedTrack";
 }
 
-export default function HomeSectionCard({ title, subtitle, coverURL }: HomeSectionCardProps) {
+interface HomeSectionCardProps {
+  sectionData: SectionData;
+}
+
+export default function HomeSectionCard({ sectionData }: HomeSectionCardProps) {
+  const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [imageURL, setImageURL] = useState("");
+  const [uri, setUri] = useState("");
+  const [contextUri, setContextUri] = useState("");
+  const [isToPlayFromBeginning, setIsToPlayFromBeginning] = useState(false);
+
+  const spotifyAPI = new SpotifyAPI();
+
+  useEffect(() => {
+    switch (sectionData.type) {
+      case "album":
+        setTitle(sectionData.item.album.name);
+        setSubtitle(sectionData.item.album.artists[0].name);
+        setImageURL(sectionData.item.album.images[0].url);
+        setContextUri(sectionData.item.album.uri);
+        setIsToPlayFromBeginning(true);
+        break;
+      case "track":
+        setTitle(sectionData.item.track.name);
+        setSubtitle(sectionData.item.track.artists[0].name);
+        setImageURL(sectionData.item.track.album.images[0].url);
+        setUri(sectionData.item.track.uri);
+        break;
+      case "playlist":
+        setTitle(sectionData.item.name);
+        setSubtitle("Playlist");
+        setImageURL(sectionData.item.images[0].url);
+        setContextUri(sectionData.item.uri);
+        setIsToPlayFromBeginning(true);
+        break;
+      case "artist":
+        setTitle(sectionData.item.name);
+        setImageURL(sectionData.item.images[0].url);
+        setContextUri(sectionData.item.uri);
+        setIsToPlayFromBeginning(true);
+    }
+  }, []);
+
+  function handlePlay() {
+    if (uri !== "") {
+      spotifyAPI.playUri(uri);
+    } else {
+      if (sectionData.type == "artist") {
+        spotifyAPI.playContext(contextUri);
+      } else {
+        spotifyAPI.playContext(contextUri, 0);
+      }
+    }
+  }
+
   return (
-    <li className={styles.cardContainer}>
+    <li className={styles.cardContainer} onClick={handlePlay}>
       <div>
         <h3>{title}</h3>
-        { subtitle ? <h4>{subtitle}</h4> : <></> }
+        {subtitle ? <h4>{subtitle}</h4> : <></>}
       </div>
       <div>
-        <img src={coverURL} alt="cover" />
+        <img src={imageURL} alt="cover" />
       </div>
     </li>
   )

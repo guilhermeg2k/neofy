@@ -49,7 +49,7 @@ export function UserProvider({ children }: UserProviderProps) {
 
   useEffect(() => {
     setSuggestions(generateSuggestions());
-  }, [savedTracks, savedAlbums, playlists]);
+  }, [playlists, savedAlbums, savedTracks]);
 
   async function getUserTopArtists(timeRange = TimeRange.short_term, limit = 10, offset = 0) {
     return await spotifyAPI.getUserTopArtists(timeRange, limit, offset);
@@ -88,9 +88,7 @@ export function UserProvider({ children }: UserProviderProps) {
         }
 
       } while (optionsHistoric[optionsHistoric.length - 1] === option || isOptionFullySuggested);
-
     }
-
     return option;
   }
 

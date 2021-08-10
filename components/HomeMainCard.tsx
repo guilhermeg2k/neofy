@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { PlayCircleFilled } from "@material-ui/icons";
 import { SongBarContext } from '../contexts/songBar';
 import { Suggestion } from "../contexts/user";
+import { SpotifyAPI } from "../services/spotifyapi";
 
 interface HomeMainCardProps {
   suggestion: Suggestion;
@@ -16,10 +17,7 @@ export default function HomeSectionCard({ suggestion }: HomeMainCardProps) {
   const [contextUri, setContextUri] = useState("");
   const [isToPlayFromBeginning, setIsToPlayFromBeginning] = useState(false);
 
-  const {
-    playUri,
-    playContext
-  } = useContext(SongBarContext);
+  const spotifyAPI = new SpotifyAPI();
 
   useEffect(() => {
     switch(suggestion.type){
@@ -46,14 +44,16 @@ export default function HomeSectionCard({ suggestion }: HomeMainCardProps) {
     }
   }, []);
 
+  console.log("TO EM LOOP FDC");
+
   function handlePlay() {
     if (uri !== ""){
-      playUri(uri);
+      spotifyAPI.playUri(uri);
     } else {
-      playContext(contextUri, 0);
+      spotifyAPI.playContext(contextUri, 0);
     }
   }
-  console.log("kkkkkkkkkk");
+  
   return ( 
     <div
       className={styles.HomeMainCardContainer}
