@@ -1,3 +1,5 @@
+import { useState, useLayoutEffect } from 'react';
+
 export function sha256(plain: string) {
   const encoder = new TextEncoder();
   const data = encoder.encode(plain);
@@ -31,4 +33,17 @@ export function millisecondsToMinutesAndSeconds(milliseconds: number): string {
   let minutes = Math.floor(milliseconds / 60000);
   let seconds = ((milliseconds % 60000) / 1000).toFixed(0);
   return minutes + ":" + (parseFloat(seconds) < 10 ? 0 : "") + seconds;
+}
+
+export function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return size;
 }

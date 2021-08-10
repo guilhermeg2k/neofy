@@ -1,7 +1,6 @@
 import styles from "../styles/components/HomeMainCard.module.scss";
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { PlayCircleFilled } from "@material-ui/icons";
-import { SongBarContext } from '../contexts/songBar';
 import { Suggestion } from "../contexts/user";
 import { spotifyAPI } from "../services/spotifyapi";
 

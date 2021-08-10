@@ -8,6 +8,8 @@ import HomeMainCard from "../components/HomeMainCard";
 import SuggestionCard from '../components/SuggestionCard';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { ArtistObject, PlaylistObject } from '../services/spotifyapi';
+import { useWindowSize } from "../utils";
+
 
 export default function Home() {
   const {
@@ -19,7 +21,7 @@ export default function Home() {
   const [currentPlaylists, setCurrentPlaylist] = useState(Array<PlaylistObject>());
   const [currentArtists, setCurrentArtists] = useState(Array<ArtistObject>());
   const [currentSectionPage, setCurrentSectionPage] = useState([0, 0]);
-  const numberOfCardsPerSection = 5;
+  const [numberOfCardsPerSection, setNumberOfCardsPerSection] = useState(5);
 
   function handleNextOnSection<Type>(array: Array<Type>, setFunction: (array: Array<Type>) => void, sectionNumber: number) {
     const newCurrentSectionPage = [...currentSectionPage];
@@ -51,7 +53,6 @@ export default function Home() {
   useEffect(() => {
     setCurrentPlaylist(playlists.slice(0, numberOfCardsPerSection));
     setCurrentArtists(followedArtists.slice(0, numberOfCardsPerSection));
-    console.log("CALATE EPELEO");
   }, [playlists, followedArtists]);
 
   console.log(suggestions);

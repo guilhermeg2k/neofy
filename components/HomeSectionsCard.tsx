@@ -47,6 +47,7 @@ export default function HomeSectionCard({ sectionData }: HomeSectionCardProps) {
         setTitle(sectionData.item.name);
         setImageURL(sectionData.item.images[0].url);
         setContextUri(sectionData.item.uri);
+        setSubtitle("Artist");
         setIsToPlayFromBeginning(true);
     }
   }, [sectionData]);
