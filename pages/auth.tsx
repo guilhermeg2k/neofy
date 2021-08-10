@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { SpotifyAPI } from "../services/spotifyapi";
+import { spotifyAPI, SpotifyAPI } from "../services/spotifyapi";
 import Cookies from "js-cookie";
 
 export default function Auth() {
   const router = useRouter();
   const { code, state, error } = router.query;
-
   const codeVerifier = Cookies.get("code-verifier");
 
   useEffect(() => {
@@ -24,6 +23,7 @@ export default function Auth() {
         window.open("/", "_self");
       }
       fetchCredencials();
+      
     } else {
       Cookies.set("auth-status", "failed");
     }

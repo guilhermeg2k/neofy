@@ -106,15 +106,6 @@
 
   &:hover {
     cursor: pointer;
-    &::-moz-range-thumb {
-      visibility: visible;
-      opacity: 1;
-      height: 18px;
-      width: 18px;
-      border-radius: 50%;
-      border-color: vars.$white;
-      cursor: pointer;
-    }
   }
 }
 

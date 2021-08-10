@@ -8,6 +8,7 @@ export interface UserCredencials {
   scope: string;
   expiresIn: string;
   refreshToken: string;
+  createdAt: number;
 }
 
 export interface ExternalUrlObject {
@@ -201,12 +202,12 @@ export interface ContextObject {
   uri: string;
 }
 
-export interface SavedAlbumObject{
+export interface SavedAlbumObject {
   added_at: Date;
   album: AlbumObject;
 }
 
-export interface SavedTrackObject{
+export interface SavedTrackObject {
   added_at: Date;
   track: TrackObject;
 }
@@ -479,6 +480,39 @@ export class SpotifyAPI {
     }
   }
 
+  async getRefreshedToken(clientId: string) {
+    const params = new URLSearchParams();
+    const refreshToken = SpotifyAPI.userCredencials.refreshToken;
+    params.append("client_id", clientId);
+    params.append("grant_type", "refresh_token");
+    params.append("refresh_token", refreshToken);
+    try {
+      const response = await axios.post(
+        "https://accounts.spotify.com/api/token",
+        params,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+      const data = response.data;
+      const userCredencials: UserCredencials = {
+        acessToken: data.access_token,
+        expiresIn: data.expires_in,
+        refreshToken: data.refresh_token,
+        tokenType: data.token_type,
+        createdAt: Date.now(),
+        scope: data.scope,
+      };
+      return userCredencials;
+    } catch (err) {
+      //Cookies.set("auth-status", "failed");
+      console.log(err);
+      return null;
+    }
+  }
+
   static async fetchUserCredencials(
     clientID: string,
     code: string,
@@ -505,6 +539,7 @@ export class SpotifyAPI {
       const userCredencials: UserCredencials = {
         acessToken: data.access_token,
         expiresIn: data.expires_in,
+        createdAt: Date.now(), 
         refreshToken: data.refresh_token,
         tokenType: data.token_type,
         scope: data.scope,
