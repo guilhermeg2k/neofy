@@ -1,5 +1,3 @@
-import Cookies from "js-cookie";
-
 import { SpotifyAPI } from "../services/spotifyapi";
 
 export interface SpotifyPlayer {

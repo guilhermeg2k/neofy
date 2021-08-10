@@ -45,16 +45,18 @@
   height: 6px;
   flex-grow: 1;
   width: 100%;
+  overflow: hidden;
+  background-color: vars.$white;
+
   &::-webkit-slider-thumb {
-    appearance: none;
-    visibility: hidden;
-    height: 18px;
-    width: 18px;
-    border-color: vars.$white;
-    cursor: pointer;
-    opacity: 0;
-    transition: visibility 0.3s linear, opacity 0.1s linear;
+    width: 10px;
+    -webkit-appearance: none;
+    height: 10px;
+    cursor: ew-resize;
+    background: vars.$primary;
+    box-shadow: -10000px 0 0 10000px vars.$primary;
   }
+
 
   &::-moz-range-thumb {
     appearance: none;
@@ -68,11 +70,11 @@
   }
 
   &::-webkit-slider-runnable-track {
-    background-color: vars.$primary;
-    border-radius: 10px;
-    height: 11px;
+    height: 10px;
+    -webkit-appearance: none;
+    margin-top: -1px;
   }
-
+  
   &::-moz-range-progress {
     background-color: vars.$primary;
     height: 6px;
@@ -85,16 +87,6 @@
       opacity: 1;
       height: 18px;
       width: 18px;
-      border-radius: 50%;
-      border-color: vars.$white;
-      cursor: pointer;
-    }
-    &::-webkit-slider-thumb {
-      visibility: visible;
-      position: relative;
-      top: -4px;
-      opacity: 1;
-      background-color: vars.$white;
       border-radius: 50%;
       border-color: vars.$white;
       cursor: pointer;

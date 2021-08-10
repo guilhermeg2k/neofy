@@ -10,6 +10,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
           <title> Neofy </title>
+          
         </Head>
         <body>
           <Main />

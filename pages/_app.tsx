@@ -6,7 +6,10 @@ import { SpotifyAPI } from "../services/spotifyapi";
 import { initSpotifySDK } from "../services/spotifysdk";
 import Cookies from "js-cookie";
 
+initSpotifySDK();
+
 function MyApp({ Component, pageProps }) {
+  
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -16,7 +19,6 @@ function MyApp({ Component, pageProps }) {
     } else {
       setAuthenticated(true);
     }
-    initSpotifySDK();
   }, []);
 
   if (authenticated) {

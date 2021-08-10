@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { spotifySDK } from "../services/spotifysdk";
+import { spotifySDK, initSpotifySDK } from "../services/spotifysdk";
 import { spotifyAPI } from "../services/spotifyapi";
 import Cookies from "js-cookie";
 
@@ -83,12 +83,13 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
     }
     spotifyAPI.setRepeatMode(newRepeatMode);
   }
-
+  
   useEffect(() => {
+    
     spotifySDK.onReady(({ device_id }) => {
       console.log("Ready with Device ID", device_id);
       Cookies.set("device-id", device_id);
-      //spotifyAPI.playCurrentPlayBack();
+      spotifyAPI.playCurrentPlayBack();
     });
 
     spotifySDK.onStateChange((state) => {
