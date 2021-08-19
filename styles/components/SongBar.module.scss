@@ -1,7 +1,5 @@
 @use "../vars";
 
-
-
 .songBarContainer {
   z-index: 1000;
   position: fixed;
@@ -76,7 +74,7 @@
     width: 10px;
     -webkit-appearance: none;
     height: 10px;
-    cursor: ew-resize;
+    cursor: pointer;
     background: vars.$primary;
     box-shadow: -10000px 0 0 10000px vars.$primary;
   }
@@ -85,8 +83,8 @@
   &::-moz-range-thumb {
     appearance: none;
     visibility: hidden;
-    height: 18px;
-    width: 18px;
+    height: 12px;
+    width: 12px;
     border-color: vars.$white;
     cursor: pointer;
     opacity: 0;
@@ -105,6 +103,15 @@
   }
 
   &:hover {
+    &::-moz-range-thumb {
+      visibility: visible;
+      opacity: 1;
+      height: 12px;
+      width: 12px;
+      border-radius: 50%;
+      border-color: vars.$white;
+      cursor: pointer;
+    }
     cursor: pointer;
   }
 }
@@ -141,5 +148,11 @@
     img {
       height: 35px;
     }
+  }
+}
+
+@-moz-document url-prefix() {
+  .slider{
+    overflow: visible;
   }
 }

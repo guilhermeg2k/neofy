@@ -6,16 +6,24 @@ import { spotifyAPI, SpotifyAPI } from "../services/spotifyapi";
 import { initSpotifySDK } from "../services/spotifysdk";
 import Cookies from "js-cookie";
 import { setInterval } from "timers";
-
+import { isObjectEmpty } from "../utils/";
 initSpotifySDK();
 
 function MyApp({ Component, pageProps }) {
   const [authenticated, setAuthenticated] = useState(false);
 
   function refreshToken() {
-    const userCredencials = spotifyAPI.getRefreshedToken(SpotifyAPI.clientID);
-    Cookies.set("user-credencials", JSON.stringify(userCredencials));
-    Cookies.set("auth-status", "success");
+    try {
+      const userCredencials = spotifyAPI.getRefreshedToken(SpotifyAPI.clientID);
+      if (!isObjectEmpty(userCredencials)) {
+        console.log("USER CRED NOT EMPTY");
+        Cookies.set("user-credencials", JSON.stringify(userCredencials));
+        Cookies.set("auth-status", "success");
+        spotifyAPI.syncApiToken();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(() => {
@@ -27,13 +35,16 @@ function MyApp({ Component, pageProps }) {
       const userCredencials = SpotifyAPI.userCredencials;
 
       if ((Date.now() - userCredencials.createdAt) > (55 * 60000)) {
+        console.log("REFRESHING TOKEN");
         refreshToken();
-        setInterval(() => {
-          if ((Date.now() - userCredencials.createdAt) > (55 * 60000)) {
-            refreshToken();
-          }
-        });
       }
+
+      setInterval(() => {
+        if ((Date.now() - userCredencials.createdAt) > (55 * 60000)) {
+          console.log("REFRESHING TOKEN");
+          refreshToken();
+        }
+      }, 5 * 60000);
     }
   }, []);
 

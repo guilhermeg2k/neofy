@@ -248,6 +248,16 @@ export class SpotifyAPI {
     });
   }
 
+  syncApiToken(){
+    this.axios = axios.create({
+      baseURL: "https://api.spotify.com/v1/",
+      headers: {
+        Authorization: `${SpotifyAPI.userCredencials.tokenType} ${SpotifyAPI.userCredencials.acessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
   static get userCredencials(): UserCredencials {
     const credencials = Cookies.get("user-credencials");
     if (credencials) {
@@ -507,9 +517,7 @@ export class SpotifyAPI {
       };
       return userCredencials;
     } catch (err) {
-      //Cookies.set("auth-status", "failed");
       console.log(err);
-      return null;
     }
   }
 

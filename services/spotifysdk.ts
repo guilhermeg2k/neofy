@@ -81,18 +81,18 @@ export var spotifySDK: SpotifySDK;
 
 export function initSpotifySDK() {
   if (process.browser) {
-    const token = SpotifyAPI.userCredencials.acessToken;
-    spotifySDK = new SpotifySDK(token);
+    spotifySDK = new SpotifySDK();
   }
 }
 
 class SpotifySDK {
   player: SpotifyPlayer;
-  constructor(token: string) {
+  constructor() {
     (window as any).onSpotifyWebPlaybackSDKReady = () => {
       this.player = new Spotify.Player({
         name: "Neofy",
         getOAuthToken: (cb) => {
+          const token = SpotifyAPI.userCredencials.acessToken;
           cb(token);
         },
       });

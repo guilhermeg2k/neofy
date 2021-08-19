@@ -45,9 +45,9 @@
   height: 6px;
   flex-grow: 1;
   width: 100%;
-  overflow: hidden;
   background-color: vars.$white;
-
+  overflow: hidden;
+  
   &::-webkit-slider-thumb {
     width: 10px;
     -webkit-appearance: none;
@@ -61,8 +61,8 @@
   &::-moz-range-thumb {
     appearance: none;
     visibility: hidden;
-    height: 18px;
-    width: 18px;
+    height: 12px;
+    width: 12px;
     border-color: vars.$white;
     cursor: pointer;
     opacity: 0;
@@ -85,8 +85,8 @@
     &::-moz-range-thumb {
       visibility: visible;
       opacity: 1;
-      height: 18px;
-      width: 18px;
+      height: 12px;
+      width: 12px;
       border-radius: 50%;
       border-color: vars.$white;
       cursor: pointer;
@@ -118,5 +118,11 @@
     img {
       height: 35px;
     }
+  }
+}
+
+@-moz-document url-prefix() {
+  .slider{
+    overflow: visible;
   }
 }
