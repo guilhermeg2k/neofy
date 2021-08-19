@@ -493,9 +493,9 @@ export class SpotifyAPI {
   async getRefreshedToken(clientId: string) {
     const params = new URLSearchParams();
     const refreshToken = SpotifyAPI.userCredencials.refreshToken;
-    params.append("client_id", clientId);
     params.append("grant_type", "refresh_token");
     params.append("refresh_token", refreshToken);
+    params.append("client_id", clientId);
     try {
       const response = await axios.post(
         "https://accounts.spotify.com/api/token",
@@ -517,6 +517,7 @@ export class SpotifyAPI {
       };
       return userCredencials;
     } catch (err) {
+      Cookies.set("auth-status", "failed");
       console.log(err);
     }
   }

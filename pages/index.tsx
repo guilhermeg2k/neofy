@@ -3,13 +3,12 @@ import { UserContext } from '../contexts/user';
 import styles from "../styles/pages/Home.module.scss";
 import SongBar from "../components/SongBar";
 import LeftBar from "../components/LeftBar";
+import Footer from "../components/Footer";
 import HomeSectionCard from "../components/HomeSectionsCard";
 import HomeMainCard from "../components/HomeMainCard";
 import SuggestionCard from '../components/SuggestionCard';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { ArtistObject, PlaylistObject } from '../services/spotifyapi';
-import { useWindowSize } from "../utils";
-
 
 export default function Home() {
   const {
@@ -30,7 +29,7 @@ export default function Home() {
 
     if (newList.length > 0) {
       if (newList.length < numberOfCardsPerSection){
-        for(let i = 0; i <=  numberOfCardsPerSection - newList.length + 1; i++){
+        for(let i = 0; i <=  numberOfCardsPerSection - newList.length; i++){
           newList.push(array[i]);
         }
       }
@@ -124,7 +123,7 @@ export default function Home() {
           </section>
         </div>
       </main>
-      <footer>FOOTEEEEEEEEEER</footer>
+      <Footer/>
     </>
   );
 }

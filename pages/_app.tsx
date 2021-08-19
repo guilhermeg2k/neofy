@@ -12,11 +12,10 @@ initSpotifySDK();
 function MyApp({ Component, pageProps }) {
   const [authenticated, setAuthenticated] = useState(false);
 
-  function refreshToken() {
+  async function refreshToken() {
     try {
-      const userCredencials = spotifyAPI.getRefreshedToken(SpotifyAPI.clientID);
+      const userCredencials = await spotifyAPI.getRefreshedToken(SpotifyAPI.clientID);
       if (!isObjectEmpty(userCredencials)) {
-        console.log("USER CRED NOT EMPTY");
         Cookies.set("user-credencials", JSON.stringify(userCredencials));
         Cookies.set("auth-status", "success");
         spotifyAPI.syncApiToken();

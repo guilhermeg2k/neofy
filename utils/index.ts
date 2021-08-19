@@ -1,5 +1,3 @@
-import { useState, useLayoutEffect } from 'react';
-
 export function sha256(plain: string) {
   const encoder = new TextEncoder();
   const data = encoder.encode(plain);

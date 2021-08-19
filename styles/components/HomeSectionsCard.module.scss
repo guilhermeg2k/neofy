@@ -2,8 +2,8 @@
 
 .cardContainer {
   list-style: none;
-  width: 231px;
-  height: 284px;
+  width: 180px;
+  height: 233px;
   border-radius: 2px;
   background-color: vars.$dark-2;
   padding: 16px;
@@ -33,13 +33,6 @@
   }
   &:hover {
     background-color: vars.$dark-4;
-  }
-}
-
-@media (min-width: vars.$medium) {
-  .cardContainer {
-    width: 180px;
-    height: 233px;
   }
 }
 
