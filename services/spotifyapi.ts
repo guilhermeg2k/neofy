@@ -221,7 +221,7 @@ export enum TimeRange {
 export class SpotifyAPI {
   private axios: AxiosInstance;
   static clientID = "eca09370790043d6a575e301b2da83ca";
-  static redirectURL = process.env.REDIRECT_URL;
+  static redirectURL = process.env.NEXT_PUBLIC_REDIRECT_URL;
   static scopes = [
     "streaming",
     "user-read-email",
@@ -573,8 +573,6 @@ export class SpotifyAPI {
       `&state=e21392da45dbf4` +
       `&code_challenge=${codeChallenge}` +
       `&code_challenge_method=S256`;
-
-    Cookies.set("auth-status", "in progress");
     window.open(requestURL, "_self");
   }
 }
