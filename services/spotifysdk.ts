@@ -90,6 +90,7 @@ class SpotifySDK {
   player: SpotifyPlayer;
   constructor() {
     (window as any).onSpotifyWebPlaybackSDKReady = () => {
+      console.log("SPOTIFY WEB PLAY SDK");
       this.player = new Spotify.Player({
         name: "Neofy",
         getOAuthToken: (cb) => {

@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { spotifySDK, initSpotifySDK } from "../services/spotifysdk";
+import { spotifySDK } from "../services/spotifysdk";
 import { spotifyAPI } from "../services/spotifyapi";
 import Cookies from "js-cookie";
 

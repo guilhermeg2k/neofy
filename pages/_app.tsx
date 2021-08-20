@@ -29,6 +29,7 @@ function MyApp({ Component, pageProps }) {
     if (authStatus === "failed" || !authStatus) {
       SpotifyAPI.authenticate();
     } else {
+      initSpotifySDK();
       setAuthenticated(true);
       const userCredencials = SpotifyAPI.userCredencials;
 
