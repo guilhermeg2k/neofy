@@ -7,11 +7,10 @@ import { initSpotifySDK } from "../services/spotifysdk";
 import Cookies from "js-cookie";
 import { setInterval } from "timers";
 import { isObjectEmpty } from "../utils/";
-initSpotifySDK();
 
 function MyApp({ Component, pageProps }) {
+  initSpotifySDK();
   const [authenticated, setAuthenticated] = useState(false);
-
   async function refreshToken() {
     try {
       const userCredencials = await spotifyAPI.getRefreshedToken(SpotifyAPI.clientID);
