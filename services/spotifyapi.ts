@@ -573,6 +573,7 @@ export class SpotifyAPI {
       `&state=e21392da45dbf4` +
       `&code_challenge=${codeChallenge}` +
       `&code_challenge_method=S256`;
+      Cookies.set("auth-status", "IN-PROGRESS");
     window.open(requestURL, "_self");
   }
 }
