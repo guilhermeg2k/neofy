@@ -9,7 +9,6 @@ import { setInterval } from "timers";
 import { isObjectEmpty } from "../utils/";
 
 function MyApp({ Component, pageProps }) {
-  initSpotifySDK();
   const [authenticated, setAuthenticated] = useState(false);
   async function refreshToken() {
     try {
