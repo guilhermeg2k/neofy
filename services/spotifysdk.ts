@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-nocheck
 import { SpotifyAPI } from "../services/spotifyapi";
 
 export interface SpotifyPlayer {
