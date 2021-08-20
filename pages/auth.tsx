@@ -9,21 +9,21 @@ export default function Auth() {
   const codeVerifier = Cookies.get("code-verifier");
 
   useEffect(() => {
+    async function fetchCredencials() {
+      const userCredencials = await SpotifyAPI.fetchUserCredencials(
+        SpotifyAPI.clientID,
+        code as string,
+        codeVerifier,
+        SpotifyAPI.redirectURL
+      );
+      Cookies.set("user-credencials", JSON.stringify(userCredencials));
+      Cookies.set("auth-status", "success");
+      window.open("/", "_self");
+    }
+    
     if (!router.isReady) return;
     if (!error) {
-      async function fetchCredencials() {
-        const userCredencials = await SpotifyAPI.fetchUserCredencials(
-          SpotifyAPI.clientID,
-          code as string,
-          codeVerifier,
-          SpotifyAPI.redirectURL
-        );
-        Cookies.set("user-credencials", JSON.stringify(userCredencials));
-        Cookies.set("auth-status", "success");
-        window.open("/", "_self");
-      }
       fetchCredencials();
-      
     } else {
       Cookies.set("auth-status", "failed");
     }

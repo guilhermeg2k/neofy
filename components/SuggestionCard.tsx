@@ -6,7 +6,7 @@ import { SongBarContext } from "../contexts/songBar";
 import { spotifyAPI } from "../services/spotifyapi";
 
 interface SuggestionCardProps {
-  suggestion: Suggestion;
+  suggestion: any;
 }
 
 export default function SuggestionCard({ suggestion }: SuggestionCardProps) {

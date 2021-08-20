@@ -1,3 +1,4 @@
+// @ts-ignore
 import { SpotifyAPI } from "../services/spotifyapi";
 
 export interface SpotifyPlayer {
@@ -10,7 +11,7 @@ export interface SpotifyPlayer {
     ) => void
   ) => boolean;
 
-  removeListener: (eventName: string, cb: ({}) => void) => boolean;
+  removeListener: (eventName: string, cb: ({ }) => void) => boolean;
   getCurrentState: (cb: (state: WebPlaybackState) => void) => void;
   setName: (newName: string) => Promise<boolean>;
   getVolume: () => Promise<number>;
@@ -96,7 +97,6 @@ class SpotifySDK {
           cb(token);
         },
       });
-
       // Error handling
       this.player.addListener(
         "initialization_error",
@@ -133,7 +133,7 @@ class SpotifySDK {
           console.log("Device ID has gone offline", device_id);
         }
       );
-      
+
       // Connect to the player!
       this.player.connect();
     };
@@ -169,7 +169,7 @@ class SpotifySDK {
     this.player?.previousTrack();
   }
 
-  seekToPosition(position: number){
+  seekToPosition(position: number) {
     this.player?.seek(position);
   }
 }

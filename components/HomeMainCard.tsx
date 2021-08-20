@@ -5,7 +5,7 @@ import { Suggestion } from "../contexts/user";
 import { spotifyAPI } from "../services/spotifyapi";
 
 interface HomeMainCardProps {
-  suggestion: Suggestion;
+  suggestion: any;
 }
 
 export default function HomeSectionCard({ suggestion }: HomeMainCardProps) {

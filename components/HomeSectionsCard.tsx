@@ -8,7 +8,7 @@ interface SectionData {
 }
 
 interface HomeSectionCardProps {
-  sectionData: SectionData;
+  sectionData: any;
 }
 
 export default function HomeSectionCard({ sectionData }: HomeSectionCardProps) {

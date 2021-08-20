@@ -218,11 +218,10 @@ export enum TimeRange {
   short_term
 }
 
-
 export class SpotifyAPI {
   private axios: AxiosInstance;
   static clientID = "eca09370790043d6a575e301b2da83ca";
-  static redirectURL = "http://localhost:3000/auth";
+  static redirectURL = process.env.REDIRECT_URL;
   static scopes = [
     "streaming",
     "user-read-email",
