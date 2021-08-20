@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { setInterval } from "timers";
 import { isObjectEmpty } from "../utils/";
 
+initSpotifySDK();
 function MyApp({ Component, pageProps }) {
   const [authenticated, setAuthenticated] = useState(false);
   async function refreshToken() {
@@ -28,7 +29,6 @@ function MyApp({ Component, pageProps }) {
     if (authStatus === "failed" || !authStatus) {
       SpotifyAPI.authenticate();
     } else {
-      initSpotifySDK();
       setAuthenticated(true);
       const userCredencials = SpotifyAPI.userCredencials;
 
