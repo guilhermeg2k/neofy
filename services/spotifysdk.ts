@@ -97,6 +97,7 @@ class SpotifySDK {
           cb(token);
         },
       });
+      
       // Error handling
       this.player.addListener(
         "initialization_error",

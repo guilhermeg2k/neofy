@@ -69,7 +69,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
   function toggleShuffle() {
     spotifyAPI.setShuffle(!shuffle);
   }
- 
+
   function seekToPosition(position: number) {
     spotifySDK.seekToPosition(position);
   }
@@ -83,9 +83,9 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
     }
     spotifyAPI.setRepeatMode(newRepeatMode);
   }
-  
+
   useEffect(() => {
-    
+
     spotifySDK.onReady(({ device_id }) => {
       console.log("Ready with Device ID", device_id);
       Cookies.set("device-id", device_id);
@@ -93,25 +93,26 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
     });
 
     spotifySDK.onStateChange((state) => {
-      let { context } = state;
-      let { current_track } = state.track_window;
+      if (state) {
+        let { context } = state;
+        let { current_track } = state.track_window;
 
-      setCurrentSong(current_track.name);
-      setCurrentArtist(current_track.artists[0].name);
-      setAlbumImgUrl(current_track.album.images[0].url);
-      setMediumAlbumImgUrl(current_track.album.images[1].url);
-      setLargeAlbumImgUrl(current_track.album.images[2].url);
-      setShuffle(state.shuffle);
-      setRepeatMode(state.repeat_mode);
-      setIsPaused(state.paused);
-      setCurrentSongDuration(current_track.duration_ms);
-      setCurrentSongPosition(state.position);
-      setCurrentContext({
-        type: context.uri.includes("playlist") ? "playlist" : context.uri.includes("artist") ? "artist" : "album",
-        name: context.metadata.context_description
-      })
-
-      console.log(state);
+        setCurrentSong(current_track.name);
+        setCurrentArtist(current_track.artists[0].name);
+        setAlbumImgUrl(current_track.album.images[0].url);
+        setMediumAlbumImgUrl(current_track.album.images[1].url);
+        setLargeAlbumImgUrl(current_track.album.images[2].url);
+        setShuffle(state.shuffle);
+        setRepeatMode(state.repeat_mode);
+        setIsPaused(state.paused);
+        setCurrentSongDuration(current_track.duration_ms);
+        setCurrentSongPosition(state.position);
+        setCurrentContext({
+          type: context.uri.includes("playlist") ? "playlist" : context.uri.includes("artist") ? "artist" : "album",
+          name: context.metadata.context_description
+        });
+        console.log(state);
+      }
     });
   }, []);
 
