@@ -221,8 +221,8 @@ export enum TimeRange {
 
 export class SpotifyAPI {
   private axios: AxiosInstance;
-  static clientID = "eca09370790043d6a575e301b2da83ca";
-  static redirectURL = "http://localhost:3000/auth";
+  static clientID = process.env.NEXT_PUBLIC_CLIENT_ID || "eca09370790043d6a575e301b2da83ca";
+  static redirectURL = process.env.NEXT_PUBLIC_REDIRECT_URL;
   static scopes = [
     "streaming",
     "user-read-email",
@@ -239,6 +239,7 @@ export class SpotifyAPI {
   ];
 
   constructor() {
+    console.log(SpotifyAPI.redirectURL, SpotifyAPI.clientID);
     this.axios = axios.create({
       baseURL: "https://api.spotify.com/v1/",
       headers: {
