@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Link from "next/link";
 import styles from "../styles/components/SongBar.module.scss";
 import {
@@ -12,7 +12,6 @@ import {
   PauseCircleOutline,
 } from "@material-ui/icons";
 import { SongBarContext } from "../contexts/songBar";
-
 export default function SongBar() {
   const {
     currentSong,

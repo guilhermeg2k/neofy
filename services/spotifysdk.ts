@@ -1,4 +1,5 @@
-import { SpotifyAPI } from "../services/spotifyapi";
+import Cookies from "js-cookie";
+import { spotifyAPI, SpotifyAPI } from "../services/spotifyapi";
 
 export interface SpotifyPlayer {
   connect: () => Promise<boolean>;
@@ -10,7 +11,7 @@ export interface SpotifyPlayer {
     ) => void
   ) => boolean;
 
-  removeListener: (eventName: string, cb: ({}) => void) => boolean;
+  removeListener: (eventName: string, cb: ({ }) => void) => boolean;
   getCurrentState: (cb: (state: WebPlaybackState) => void) => void;
   setName: (newName: string) => Promise<boolean>;
   getVolume: () => Promise<number>;
@@ -53,10 +54,10 @@ export interface WebPlaybackState {
   track_window: TrackWindow;
 }
 
-export interface TrackWindow{
+export interface TrackWindow {
   current_track: WebPlaybackTrack; // The track currently on local playback
   previous_tracks: Array<WebPlaybackTrack>; // Previously played tracks. Number can vary.
-  next_tracks: Array<WebPlaybackTrack>; 
+  next_tracks: Array<WebPlaybackTrack>;
 }
 
 export interface WebPlaybackTrack {
@@ -89,76 +90,70 @@ export function initSpotifySDK() {
 
 class SpotifySDK {
   player: Spotify.Player;
+
   constructor() {
-    (window as any).onSpotifyWebPlaybackSDKReady = () => {
-      this.player = new Spotify.Player({
-        name: "Neofy",
+    const script = document.createElement("script");
+    script.src = "https://sdk.scdn.co/spotify-player.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    window.onSpotifyWebPlaybackSDKReady = () => {
+
+      this.player = new window.Spotify.Player({
+        name: 'Neofy',
         getOAuthToken: (cb) => {
           const token = SpotifyAPI.userCredencials.acessToken;
           cb(token);
         },
+        volume: 0.5
+      });
+
+      this.player.addListener('ready', ({ device_id }) => {
+        Cookies.set("device-id", device_id);
+        spotifyAPI.playCurrentPlayBack();
+        console.log('Ready with Device ID', device_id);
+      });
+
+      this.player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID has gone offline', device_id);
+      });
+
+      this.player.addListener('player_state_changed', (state: Spotify.PlaybackState) => {
+        const stateChangeEvent = new CustomEvent('changeStateEvent', {detail: state});
+        document.dispatchEvent(stateChangeEvent);
       });
 
       // Error handling
-      this.player.addListener(
-        "initialization_error",
-        ({ message }: WebPlaybackError) => {
-          console.error(message);
-        }
-      );
+      this.player.addListener("initialization_error", ({ message }: WebPlaybackError) => {
+        console.error(message);
+      });
 
-      this.player.addListener(
-        "authentication_error",
-        ({ message }: WebPlaybackError) => {
-          console.error(message);
-        }
-      );
+      this.player.addListener("authentication_error", ({ message }: WebPlaybackError) => {
+        console.error(message);
+      });
 
-      this.player.addListener(
-        "account_error",
-        ({ message }: WebPlaybackError) => {
-          console.error(message);
-        }
-      );
+      this.player.addListener("account_error", ({ message }: WebPlaybackError) => {
+        console.error(message);
+      });
 
-      this.player.addListener(
-        "playback_error",
-        ({ message }: WebPlaybackError) => {
-          console.error(message);
-        }
-      );
+      this.player.addListener("playback_error", ({ message }: WebPlaybackError) => {
+        console.error(message);
+      });
 
-      // Not Ready
-      this.player.addListener(
-        "not_ready",
-        ({ device_id }: WebPlayblackPlayer) => {
-          console.log("Device ID has gone offline", device_id);
-        }
-      );
-      
-      // Connect to the player!
       this.player.connect();
     };
-  }
+  };
 
   onStateChange(callback: (state: Spotify.PlaybackState) => void) {
-    this.player.addListener(
-      "player_state_changed",
-      (state: Spotify.PlaybackState) => {
-        callback(state);
-      }
-    );
-  }
-
-  onReady(callback: (state: WebPlayblackPlayer) => void) {
-    this.player?.addListener("ready", (state: WebPlayblackPlayer) => {
-      callback(state);
+    document.addEventListener('changeStateEvent', (e: CustomEvent) => {
+      callback(e.detail);
     });
   }
 
   changeVolume(newVolume: number) {
     this.player?.setVolume(newVolume);
   }
+
   togglePlay() {
     this.player?.togglePlay();
   }
@@ -171,7 +166,10 @@ class SpotifySDK {
     this.player?.previousTrack();
   }
 
-  seekToPosition(position: number){
+  seekToPosition(position: number) {
     this.player?.seek(position);
   }
+
 }
+
+

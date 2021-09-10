@@ -7,7 +7,6 @@ import { initSpotifySDK } from "../services/spotifysdk";
 import Cookies from "js-cookie";
 import { setInterval } from "timers";
 import { isObjectEmpty } from "../utils/";
-initSpotifySDK();
 
 function MyApp({ Component, pageProps }) {
   const [authenticated, setAuthenticated] = useState(false);
@@ -26,6 +25,7 @@ function MyApp({ Component, pageProps }) {
   }
 
   useEffect(() => {
+    initSpotifySDK();
     const authStatus = Cookies.get("auth-status");
     if (authStatus === "failed" || !authStatus) {
       SpotifyAPI.authenticate();

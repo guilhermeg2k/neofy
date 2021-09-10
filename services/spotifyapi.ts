@@ -2,9 +2,6 @@ import axios, { AxiosInstance } from "axios";
 import Cookies from "js-cookie";
 import { generateRandomString, generatecodeChallenge } from "../utils";
 
-
-
-
 export interface UserCredencials {
   acessToken: string;
   tokenType: string;
