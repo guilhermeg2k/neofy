@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { spotifySDK, initSpotifySDK } from "../services/spotifysdk";
+import { spotifySDK, initSpotifySDK, WebPlaybackState, TrackWindow } from "../services/spotifysdk";
 import { spotifyAPI } from "../services/spotifyapi";
 import Cookies from "js-cookie";
 
@@ -94,7 +94,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
 
     spotifySDK.onStateChange((state) => {
       let { context } = state;
-      let { current_track } = state.track_window;
+      let { current_track } = state.track_window as TrackWindow;
 
       setCurrentSong(current_track.name);
       setCurrentArtist(current_track.artists[0].name);

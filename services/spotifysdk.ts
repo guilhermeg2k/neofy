@@ -50,11 +50,13 @@ export interface WebPlaybackState {
   repeat_mode: number; // The repeat mode. No repeat mode is 0,
   // once-repeat is 1 and full repeat is 2.
   shuffle: boolean; // True if shuffled, false otherwise.
-  track_window: {
-    current_track: WebPlaybackTrack; // The track currently on local playback
-    previous_tracks: Array<WebPlaybackTrack>; // Previously played tracks. Number can vary.
-    next_tracks: Array<WebPlaybackTrack>; // Tracks queued next. Number can vary.
-  };
+  track_window: TrackWindow;
+}
+
+export interface TrackWindow{
+  current_track: WebPlaybackTrack; // The track currently on local playback
+  previous_tracks: Array<WebPlaybackTrack>; // Previously played tracks. Number can vary.
+  next_tracks: Array<WebPlaybackTrack>; 
 }
 
 export interface WebPlaybackTrack {
