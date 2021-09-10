@@ -86,7 +86,7 @@ export function initSpotifySDK() {
 }
 
 class SpotifySDK {
-  player: SpotifyPlayer;
+  player: Spotify.Player;
   constructor() {
     (window as any).onSpotifyWebPlaybackSDKReady = () => {
       this.player = new Spotify.Player({
@@ -139,10 +139,10 @@ class SpotifySDK {
     };
   }
 
-  onStateChange(callback: (state: WebPlaybackState) => void) {
-    this.player?.addListener(
+  onStateChange(callback: (state: Spotify.PlaybackState) => void) {
+    this.player.addListener(
       "player_state_changed",
-      (state: WebPlaybackState) => {
+      (state: Spotify.PlaybackState) => {
         callback(state);
       }
     );
