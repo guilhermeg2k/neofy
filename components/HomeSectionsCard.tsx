@@ -1,14 +1,9 @@
 import styles from "../styles/components/HomeSectionsCard.module.scss";
-import { ArtistObject, PlayHistoryObject, PlaylistObject, SavedAlbumObject, spotifyAPI, SavedTrackObject } from "../services/spotifyapi";
+import { ArtistObject, PlayHistoryObject, PlaylistObject, SavedAlbumObject, spotifyAPI, SavedTrackObject, TrackObject, DataObject } from "../services/spotifyapi";
 import { useEffect, useState } from "react";
 
-interface SectionData {
-  item: | SavedTrackObject | SavedAlbumObject | PlaylistObject | PlayHistoryObject | ArtistObject;
-  type: "playlist" | "album" | "track" | "artist" | "recentlyPlayedTrack";
-}
-
 interface HomeSectionCardProps {
-  sectionData: SectionData;
+  sectionData: DataObject;
 }
 
 export default function HomeSectionCard({ sectionData }: HomeSectionCardProps) {
@@ -19,34 +14,36 @@ export default function HomeSectionCard({ sectionData }: HomeSectionCardProps) {
   const [contextUri, setContextUri] = useState("");
   const [isToPlayFromBeginning, setIsToPlayFromBeginning] = useState(false);
 
-  console.log(sectionData);
-
   useEffect(() => {
     switch (sectionData.type) {
       case "album":
-        setTitle(sectionData.item.album.name);
-        setSubtitle(sectionData.item.album.artists[0].name);
-        setImageURL(sectionData.item.album.images[0].url);
-        setContextUri(sectionData.item.album.uri);
+        const savedAlbum = sectionData.item as SavedAlbumObject;
+        setTitle(savedAlbum.album.name);
+        setSubtitle(savedAlbum.album.artists[0].name);
+        setImageURL(savedAlbum.album.images[0].url);
+        setContextUri(savedAlbum.album.uri);
         setIsToPlayFromBeginning(true);
         break;
       case "track":
-        setTitle(sectionData.item.track.name);
-        setSubtitle(sectionData.item.track.artists[0].name);
-        setImageURL(sectionData.item.track.album.images[0].url);
-        setUri(sectionData.item.track.uri);
+        const savedTrack = sectionData.item as SavedTrackObject;
+        setTitle(savedTrack.track.name);
+        setSubtitle(savedTrack.track.artists[0].name);
+        setImageURL(savedTrack.track.album.images[0].url);
+        setUri(savedTrack.track.uri);
         break;
       case "playlist":
-        setTitle(sectionData.item.name);
-        setSubtitle("Playlist");
-        setImageURL(sectionData.item.images[0].url);
-        setContextUri(sectionData.item.uri);
+        const playlist = sectionData.item as PlaylistObject;
+        setTitle(playlist.name);
+        setSubtitle(playlist.owner.display_name);
+        setImageURL(playlist.images[0].url);
+        setContextUri(playlist.uri);
         setIsToPlayFromBeginning(true);
         break;
       case "artist":
-        setTitle(sectionData.item.name);
-        setImageURL(sectionData.item.images[0].url);
-        setContextUri(sectionData.item.uri);
+        const artist = sectionData.item as ArtistObject;
+        setTitle(artist.name);
+        setImageURL(artist.images[0].url);
+        setContextUri(artist.uri);
         setSubtitle("Artist");
         setIsToPlayFromBeginning(true);
     }

@@ -111,7 +111,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
         name: context.metadata.context_description
       })
 
-      console.log(state);
+      //console.log(state);
     });
   }, []);
 

@@ -2,6 +2,9 @@ import axios, { AxiosInstance } from "axios";
 import Cookies from "js-cookie";
 import { generateRandomString, generatecodeChallenge } from "../utils";
 
+
+
+
 export interface UserCredencials {
   acessToken: string;
   tokenType: string;
@@ -218,10 +221,14 @@ export enum TimeRange {
   short_term
 }
 
+export interface DataObject {
+  item: SavedTrackObject | SavedAlbumObject | PlaylistObject | PlayHistoryObject | ArtistObject;
+  type: "playlist" | "album" | "track" | "artist" | "recentlyPlayedTrack";
+}
 
 export class SpotifyAPI {
   private axios: AxiosInstance;
-  static clientID = process.env.NEXT_PUBLIC_CLIENT_ID || "eca09370790043d6a575e301b2da83ca";
+  static clientID = process.env.NEXT_PUBLIC_CLIENT_ID;
   static redirectURL = process.env.NEXT_PUBLIC_REDIRECT_URL;
   static scopes = [
     "streaming",
@@ -239,7 +246,6 @@ export class SpotifyAPI {
   ];
 
   constructor() {
-    console.log(SpotifyAPI.redirectURL, SpotifyAPI.clientID);
     this.axios = axios.create({
       baseURL: "https://api.spotify.com/v1/",
       headers: {
@@ -276,7 +282,6 @@ export class SpotifyAPI {
 
   async getUserInfo() {
     const response = await axios.get("me");
-    console.log(response);
   }
 
   async playUri(uri: string) {
@@ -338,7 +343,6 @@ export class SpotifyAPI {
       const response = await this.axios.put(
         `/me/player/shuffle?state=${value}`
       );
-      console.log(response);
     } catch (err) {
       console.log(err);
     }
@@ -354,7 +358,6 @@ export class SpotifyAPI {
       const response = await this.axios.put(
         `me/player/repeat?state=${newState}`
       );
-      console.log(response);
     } catch (err) {
       console.log(err);
     }
@@ -408,7 +411,7 @@ export class SpotifyAPI {
     }
   }
 
-  async getUserSavedAlbums(limit = 20, offset = 0): Promise<Array<AlbumObject>> {
+  async getUserSavedAlbums(limit = 20, offset = 0): Promise<Array<SavedAlbumObject>> {
     try {
       const response = await this.axios.get(
         `me/albums?limit=${limit}&offset=${offset}`
@@ -424,7 +427,7 @@ export class SpotifyAPI {
     }
   }
 
-  async getUserSavedTracks(limit = 20, offset = 0): Promise<Array<TrackObject>> {
+  async getUserSavedTracks(limit = 20, offset = 0): Promise<Array<SavedTrackObject>> {
     try {
       const response = await this.axios.get(
         `me/tracks?limit=${limit}&offset=${offset}`

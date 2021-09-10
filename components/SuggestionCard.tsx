@@ -1,12 +1,11 @@
 import styles from "../styles/components/SuggestionCard.module.scss";
 import { useState, useEffect, useContext } from "react";
 import { PlayCircleFilled } from "@material-ui/icons";
-import { Suggestion } from "../contexts/user";
 import { SongBarContext } from "../contexts/songBar";
-import { spotifyAPI } from "../services/spotifyapi";
+import { DataObject, PlaylistObject, SavedAlbumObject, SavedTrackObject, spotifyAPI } from "../services/spotifyapi";
 
 interface SuggestionCardProps {
-  suggestion: Suggestion;
+  suggestion: DataObject;
 }
 
 export default function SuggestionCard({ suggestion }: SuggestionCardProps) {
@@ -20,23 +19,26 @@ export default function SuggestionCard({ suggestion }: SuggestionCardProps) {
   useEffect(() => {
     switch(suggestion.type){
       case "album":
-        setTitle(suggestion.item.album.name);
-        setSubtitle(suggestion.item.album.artists[0].name);
-        setImageURL(suggestion.item.album.images[0].url);
-        setContextUri(suggestion.item.album.uri);
+        const savedAlbum = suggestion.item as SavedAlbumObject;
+        setTitle(savedAlbum.album.name);
+        setSubtitle(savedAlbum.album.artists[0].name);
+        setImageURL(savedAlbum.album.images[0].url);
+        setContextUri(savedAlbum.album.uri);
         setIsToPlayFromBeginning(true);
         break;
       case "track":
-        setTitle(suggestion.item.track.name);
-        setSubtitle(suggestion.item.track.artists[0].name);
-        setImageURL(suggestion.item.track.album.images[0].url);
-        setUri(suggestion.item.track.uri);
+        const savedTrack = suggestion.item as SavedTrackObject;
+        setTitle(savedTrack.track.name);
+        setSubtitle(savedTrack.track.artists[0].name);
+        setImageURL(savedTrack.track.album.images[0].url);
+        setUri(savedTrack.track.uri);
         break;
       case "playlist":
-        setTitle(suggestion.item.name);
-        setSubtitle("Playlist");
-        setImageURL(suggestion.item.images[0].url);
-        setContextUri(suggestion.item.uri);
+        const playlist = suggestion.item as PlaylistObject;
+        setTitle(playlist.name);
+        setSubtitle(playlist.owner.display_name);
+        setImageURL(playlist.images[0].url);
+        setContextUri(playlist.uri);
         setIsToPlayFromBeginning(true);
         break;
     }

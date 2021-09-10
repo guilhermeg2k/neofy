@@ -1,22 +1,17 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { AlbumObject, ArtistObject, PlayHistoryObject, PlaylistObject, spotifyAPI, TimeRange, TrackObject } from "../services/spotifyapi";
+import { AlbumObject, ArtistObject, DataObject, PlayHistoryObject, PlaylistObject, SavedAlbumObject, SavedTrackObject, spotifyAPI, TimeRange, TrackObject } from "../services/spotifyapi";
 
 interface UserProviderProps {
   children: ReactNode;
 }
 
-export interface Suggestion {
-  item: TrackObject | AlbumObject | PlaylistObject | PlayHistoryObject;
-  type: "playlist" | "album" | "track" | "recentlyPlayedTrack";
-}
-
 interface UserContextData {
   playlists: Array<PlaylistObject>;
   followedArtists: Array<ArtistObject>;
-  savedTracks: Array<TrackObject>;
-  savedAlbums: Array<AlbumObject>;
+  savedTracks: Array<SavedTrackObject>;
+  savedAlbums: Array<SavedAlbumObject>;
   top20Tracks: Array<TrackObject>;
-  suggestions: Array<Suggestion>;
+  suggestions: Array<DataObject>;
   getUserTopArtists: (timeRange?: TimeRange, limit?: number, offset?: number) => Promise<Array<ArtistObject>>;
   getUserTopTracks: (timeRange?: TimeRange, limit?: number, offset?: number) => Promise<Array<TrackObject>>;
   getUserRecentlyPlayedTracks: (limit?: number) => Promise<Array<PlayHistoryObject>>;
@@ -27,10 +22,10 @@ export const UserContext = createContext({} as UserContextData);
 export function UserProvider({ children }: UserProviderProps) {
   const [playlists, setPlayLists] = useState(Array<PlaylistObject>());
   const [followedArtists, setFollowedArtists] = useState(Array<ArtistObject>());
-  const [savedTracks, setSavedTracks] = useState(Array<TrackObject>());
-  const [savedAlbums, setSavedAlmbums] = useState(Array<AlbumObject>());
+  const [savedTracks, setSavedTracks] = useState(Array<SavedTrackObject>());
+  const [savedAlbums, setSavedAlmbums] = useState(Array<SavedAlbumObject>());
   const [top20Tracks, setTop20Tracks] = useState(Array<TrackObject>());
-  const [suggestions, setSuggestions] = useState(Array<Suggestion>());
+  const [suggestions, setSuggestions] = useState(Array<DataObject>());
 
   useEffect(() => {
     
@@ -102,9 +97,9 @@ export function UserProvider({ children }: UserProviderProps) {
     return selection;
   }
 
-  function generateSuggestions(max = 6): Array<Suggestion> {
+  function generateSuggestions(max = 6): Array<DataObject> {
     if (playlists.length > 0 && savedAlbums.length > 0 && savedTracks.length > 0) {
-      const suggestions = Array<Suggestion>();
+      const suggestions = Array<DataObject>();
       const optionsHistoric = Array<number>();
       const selectionsHistoric = Array<Array<number>>(3);
       selectionsHistoric.fill([]);
