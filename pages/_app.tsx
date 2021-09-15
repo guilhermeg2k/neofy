@@ -34,13 +34,13 @@ function MyApp({ Component, pageProps }) {
       const userCredencials = SpotifyAPI.userCredencials;
 
       if ((Date.now() - userCredencials.createdAt) > (55 * 60000)) {
-        console.log("REFRESHING TOKEN");
-        refreshToken();
+        refreshToken().then(() => {
+          window.location.reload();
+        });
       }
 
       setInterval(() => {
         if ((Date.now() - userCredencials.createdAt) > (55 * 60000)) {
-          console.log("REFRESHING TOKEN");
           refreshToken();
         }
       }, 5 * 60000);
