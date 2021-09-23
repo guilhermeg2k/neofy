@@ -26,10 +26,9 @@
 
   div:last-child {
     width: 100%;
-    img {
-      width: 100%;
-      border-radius: 2px;
-    }
+    height: calc(100% - 53px);
+    border-radius: 2px;
+    background-size: cover;
   }
   &:hover {
     background-color: vars.$dark-4;

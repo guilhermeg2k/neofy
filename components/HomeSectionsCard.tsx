@@ -67,8 +67,8 @@ export default function HomeSectionCard({ sectionData }: HomeSectionCardProps) {
         <h3 title={title}>{title}</h3>
         {subtitle ? <h4>{subtitle}</h4> : <></>}
       </div>
-      <div>
-        <img src={imageURL} alt="cover" />
+      <div style={{backgroundImage: `url(${imageURL})`}}>
+        
       </div>
     </li>
   )
