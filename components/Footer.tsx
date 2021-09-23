@@ -3,7 +3,7 @@ import styles from "../styles/components/Footer.module.scss";
 export default function Footer(){
   return (
     <footer className={styles.footerContainer}>
-      Neofy v0.0.1
+      Neofy v0.0.2
     </footer>
   )
 }
