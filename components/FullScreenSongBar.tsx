@@ -41,10 +41,8 @@ export default function FullScreenSongBar() {
 
   function handleChangeVolume(event: React.ChangeEvent<HTMLInputElement>) {
     changeVolume(parseInt(event.currentTarget.value) / 100);
-    console.log(event.currentTarget.value);
   }
   function handleChangeSongPosition(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log(event.currentTarget.value);
     seekToPosition(parseFloat(event.currentTarget.value));
   }
   function handleTogglePlay() {

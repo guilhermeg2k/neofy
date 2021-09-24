@@ -85,15 +85,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
   }
 
   useEffect(() => {
-    
-    /*spotifySDK.onReady(({ device_id }) => {
-      console.log("Ready with Device ID", device_id);
-      Cookies.set("device-id", device_id);
-      spotifyAPI.playCurrentPlayBack();
-    });
-    */
     spotifySDK.onStateChange((state) => {
-      console.log("STATE ", state);
       if (state != null) {
         let { context } = state;
         let { current_track } = state.track_window as TrackWindow;

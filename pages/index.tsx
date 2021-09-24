@@ -9,6 +9,7 @@ import HomeMainCard from "../components/HomeMainCard";
 import SuggestionCard from '../components/SuggestionCard';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { ArtistObject, PlaylistObject } from '../services/spotifyapi';
+import { motion } from "framer-motion";
 
 export default function Home() {
   const {
@@ -53,8 +54,6 @@ export default function Home() {
     setCurrentPlaylist(playlists.slice(0, numberOfCardsPerSection));
     setCurrentArtists(followedArtists.slice(0, numberOfCardsPerSection));
   }, [playlists, followedArtists]);
-
-  console.log(suggestions);
 
   return (
     <>

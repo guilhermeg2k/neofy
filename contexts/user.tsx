@@ -132,7 +132,7 @@ export function UserProvider({ children }: UserProviderProps) {
             });
             break;
           case 3:
-            console.log("333333333");
+            break;
         }
       }
       return suggestions;
