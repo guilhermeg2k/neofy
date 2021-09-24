@@ -56,11 +56,16 @@ export default function Home() {
   }, [playlists, followedArtists]);
 
   return (
-    <>
+    <div>
       <SongBar />
       <LeftBar />
 
-      <main className={styles.homeContainer}>
+      <motion.main 
+        initial={{ x: "1000"}}
+        animate={{ x: 0 }}
+        transition={{ duration: 0.5 }}
+        className={styles.homeContainer}
+      >
         <div className={styles.homeWrapper}>
           <section className={styles.homeMainContainer}>
             {suggestions?.length > 0 ?
@@ -121,8 +126,8 @@ export default function Home() {
             </ul>
           </section>
         </div>
-      </main>
+      </motion.main>
       <Footer/>
-    </>
+    </div>
   );
 }

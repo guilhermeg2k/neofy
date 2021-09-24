@@ -6,6 +6,7 @@ import {
 } from "@material-ui/icons";
 import { SongBarContext } from "../contexts/songBar";
 import FullScreenSongBar from "../components/FullScreenSongBar";
+import { motion } from "framer-motion";
 export default function Fullscreen() {
   const {
     currentSong,
@@ -14,7 +15,12 @@ export default function Fullscreen() {
     currentContext
   } = useContext(SongBarContext);
   return (
-    <div className={styles.fullscreenContainer}>
+    <motion.div
+      initial={{ x: "-1000" }}
+      animate={{ x: 0 }}
+      transition={{ duration: 0.5 }}
+      className={styles.fullscreenContainer}
+    >
       <div className={styles.fullscreenWrapper}>
         <header>
           <div>
@@ -46,6 +52,6 @@ export default function Fullscreen() {
         </main>
       </div>
       <FullScreenSongBar />
-    </div>
+    </motion.div>
   );
 }
