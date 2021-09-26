@@ -89,7 +89,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
       if (state != null) {
         let { context } = state;
         let { current_track } = state.track_window as TrackWindow;
-        console.log(state);
+        //console.log(state);
         setCurrentSong(current_track.name);
         setCurrentArtist(current_track.artists[0].name);
         setAlbumImgUrl(current_track.album.images[0].url);
