@@ -135,22 +135,6 @@
   }
 }
 
-@media (max-width: vars.$large) {
-  .songInfo {
-    img {
-      height: 39px;
-    }
-  }
-}
-
-@media (max-width: vars.$medium) {
-  .songInfo {
-    img {
-      height: 35px;
-    }
-  }
-}
-
 @-moz-document url-prefix() {
   .slider{
     overflow: visible;

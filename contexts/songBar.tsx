@@ -89,7 +89,7 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
       if (state != null) {
         let { context } = state;
         let { current_track } = state.track_window as TrackWindow;
-
+        console.log(state);
         setCurrentSong(current_track.name);
         setCurrentArtist(current_track.artists[0].name);
         setAlbumImgUrl(current_track.album.images[0].url);
@@ -101,8 +101,10 @@ export function SongBarProvider({ children }: SongBarProviderProps) {
         setCurrentSongDuration(current_track.duration_ms);
         setCurrentSongPosition(state.position);
         setCurrentContext({
-          type: context.uri.includes("playlist") ? "playlist" : context.uri.includes("artist") ? "artist" : "album",
-          name: context.metadata.context_description
+          type: context.uri.includes("playlist") ? "playlist" : 
+            context.uri.includes("artist") ? "artist" : 
+            context.uri.includes("collection") ? "Collection" : "album",
+          name: context.uri.includes("collection") ? "Liked Songs" : context.metadata.context_description
         })
       }
     });
