@@ -124,6 +124,9 @@
     color: vars.$primary;
     cursor: pointer;
   }
+  svg{
+    transform: scale(1.1);
+  }
 }
 
 .rightControlls {
