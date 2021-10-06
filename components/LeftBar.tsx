@@ -8,6 +8,8 @@ import {
   QueueMusic,
   Album
 } from "@material-ui/icons";
+import Link from "next/link";
+
 export default function LeftBar() {
   const [hideLabel, setHideLabel] = useState(true);
   return (
@@ -19,7 +21,9 @@ export default function LeftBar() {
           onMouseLeave={() => setHideLabel(true)}
         >
           <Home />
-          <span className={hideLabel ? "hidden" : ""}>Home</span>
+          <span className={hideLabel ? "hidden" : ""}>
+            <Link href="/">Home</Link>
+          </span>
         </div>
         <div 
           className={styles.iconButton} 
@@ -27,7 +31,9 @@ export default function LeftBar() {
           onMouseLeave={() => setHideLabel(true)}
         >
           <Search />
-          <span className={hideLabel ? "hidden" : ""}>Search</span>
+          <span className={hideLabel ? "hidden" : ""}>
+            Search
+          </span>
         </div>
         <div 
           className={styles.iconButton} 
@@ -51,7 +57,9 @@ export default function LeftBar() {
           onMouseLeave={() => setHideLabel(true)}
         >
           <QueueMusic />
-          <span className={hideLabel ? "hidden" : ""}>Playlists</span>
+          <span className={hideLabel ? "hidden" : ""}>
+            <Link href="/playlists">Playlists</Link>
+          </span>
         </div>
         <div 
           className={styles.iconButton} 

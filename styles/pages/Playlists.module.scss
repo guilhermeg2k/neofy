@@ -1,0 +1,40 @@
+@use "../vars";
+
+.playlistsContainer{
+  margin-top: 120px;
+  padding: 0 40px;
+  .playlistsWrapper{
+    padding: 0 50px;
+    margin: auto;
+    padding: 0;
+
+    h1{
+      margin-bottom: 20px;
+    }
+    
+    ul{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      li{
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
+
+@media (min-width: vars.$medium) {
+  .playlistsContainer{
+    .playlistsWrapper{
+      max-width: 1000px;
+    }
+  }
+}
+
+@media (min-width: vars.$extra-large) {
+  .playlistsContainer{
+    .playlistsWrapper{
+      max-width: 1370px;
+    }
+  }
+}
