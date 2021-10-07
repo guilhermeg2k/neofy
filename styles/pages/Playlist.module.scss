@@ -4,9 +4,46 @@
   margin-top: 120px;
   padding: 0 40px;
   .playlistWrapper{
-    padding: 0 50px;
+    padding: 30px 50px;
     margin: auto;
-    padding: 0;
+    display: flex;
+    div:first-child{
+      width: 350px;
+      > div {
+        width: 100%;
+        img{
+          width: 100%;
+        }
+      }
+      > h1{
+        font-size: 4rem;
+        text-transform: capitalize;
+        color: vars.$primary;
+      }
+      > span{
+        font-weight: 500;
+        font-size: 1.1rem;
+        margin: 10px 0;
+        display: block;
+      }
+      .stats{
+        display: flex;
+        justify-content: space-between;
+        span{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1rem;
+          svg{
+            margin-right: 5px;
+            transform: scale(0.9);
+          }
+        }
+      }
+    }
+    div:last-child{
+      
+    }
   }
 }
 

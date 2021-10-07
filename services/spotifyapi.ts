@@ -49,7 +49,7 @@ export interface PlaylistObject {
   owner: PublicUserObject;
   public: boolean;
   snapshot_id: string;
-  tracks: Array<PlaylistTrackObject>;
+  tracks: any | Array<PlaylistTrackObject>;
   type: string;
   uri: string;
 }
@@ -474,7 +474,7 @@ export class SpotifyAPI {
     }
   }
 
-  async getPlayList(id: string): Promise<PlaylistObject> {
+  async getPlaylist(id: string): Promise<PlaylistObject> {
     try {
       const response = await this.axios.get(
         `playlists/${id}`
