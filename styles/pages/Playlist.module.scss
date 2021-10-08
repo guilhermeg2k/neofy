@@ -1,63 +1,87 @@
 @use "../vars";
 
-.playlistContainer{
+.playlistContainer {
   margin-top: 120px;
   padding: 0 40px;
-  .playlistWrapper{
+  .playlistWrapper {
     padding: 30px 50px;
     margin: auto;
     display: flex;
-    div:first-child{
-      width: 350px;
+    > div:first-child {
+      width: 450px;
       > div {
         width: 100%;
-        img{
+        img {
           width: 100%;
         }
       }
-      > h1{
+      > h1 {
         font-size: 4rem;
         text-transform: capitalize;
         color: vars.$primary;
       }
-      > span{
+      > span {
         font-weight: 500;
         font-size: 1.1rem;
-        margin: 10px 0;
+        margin: 7px 0;
         display: block;
       }
-      .stats{
+      .stats {
         display: flex;
         justify-content: space-between;
-        span{
+        span {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1rem;
-          svg{
-            margin-right: 5px;
-            transform: scale(0.9);
+          font-size: 0.9rem;
+          svg {
+            margin-right: 4px;
+            transform: scale(0.8);
           }
         }
       }
     }
-    div:last-child{
-      
+    > div:last-child {
+      padding-left: 50px;
+      width: 100%;
+      .searchBar {
+        display: flex;
+        height: 40px;
+        background-color: vars.$dark-2;
+        width: 100%;
+        align-items: center;
+        padding: 10px;
+      }
+
+      .songsHeader {
+        display: flex;
+        height: 40px;
+        background-color: vars.$dark-2;
+        margin: 10px 0;
+        width: 100%;
+        align-items: center;
+        padding: 10px;
+      }
+
+      .songs{
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 }
 
 @media (min-width: vars.$medium) {
-  .playlistContainer{
-    .playlistWrapper{
+  .playlistContainer {
+    .playlistWrapper {
       max-width: 1000px;
     }
   }
 }
 
 @media (min-width: vars.$extra-large) {
-  .playlistContainer{
-    .playlistWrapper{
+  .playlistContainer {
+    .playlistWrapper {
       max-width: 1370px;
     }
   }

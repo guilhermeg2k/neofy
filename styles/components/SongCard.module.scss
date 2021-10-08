@@ -1,0 +1,43 @@
+@use "../vars";
+
+.songCardWrapper {
+  display: grid;
+  grid-template-columns: 3fr 2fr 1fr 1fr;
+  justify-items: stretch;
+  align-items: center;
+  padding: 20px;
+  background-color: vars.$dark-2;
+  margin-bottom: 15px;
+  .title {
+    display: flex;
+    align-items: center;
+    .imageWrapper {
+      width: 70px;
+      > img {
+        width: 70px;
+      }
+      margin: 0 10px;
+    }
+    .name {
+      display: flex;
+      flex-direction: column;
+      span:first-child {
+        font-size: 1.2rem;
+        color: vars.$primary;
+        font-weight: 500;
+      }
+      span:last-child {
+        font-size: 0.95rem;
+      }
+    }
+  }
+  .album {
+    
+  }
+  .added{
+    justify-self: flex-end;
+  }
+  .options{
+    justify-self: flex-end;
+  }
+}
